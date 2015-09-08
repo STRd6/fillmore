@@ -12,4 +12,24 @@
 # Save Widget
 # Launch Widget
 
-alert 'heyy'
+# What is a widget, a DOM node?
+# Maybe an object with an element property?
+# widget = Dealy(data, host)
+# document.body.appendChild widget.element()
+
+# How does a widget live in a package?
+
+style = document.createElement "style"
+style.innerHTML = require "./style"
+document.head.appendChild style
+
+Widget = require "./templates/widget"
+
+global.application =
+  launch: ->
+    if url = prompt "URL", "http://www.danielx.net/pixel-editor"
+      document.body.appendChild Widget
+        title: "Yolo"
+        url: url
+
+document.body.appendChild require("./templates/main")(application)

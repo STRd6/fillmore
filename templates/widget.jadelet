@@ -1,0 +1,3 @@
+window
+  h2= @title
+  iframe(src=@url)
