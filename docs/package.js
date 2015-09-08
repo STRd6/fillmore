@@ -180,7 +180,7 @@
     },
     "main.coffee": {
       "path": "main.coffee",
-      "content": "# Probably want a bunch of garish widgets... pop-out, drag to move\n\n# Need to be able to launch the editor and create new applications/widgets\n\n# Viewers for various media types\n\n# It should be FUN!\n\n# Sample Use Case\n# Launch Editor\n# Create Widget\n# Save Widget\n# Launch Widget\n\n# What is a widget, a DOM node?\n# Maybe an object with an element property?\n# widget = Dealy(data, host)\n# document.body.appendChild widget.element()\n\n# How does a widget live in a package?\n\nstyle = document.createElement \"style\"\nstyle.innerHTML = require \"./style\"\ndocument.head.appendChild style\n\nWidget = require \"./templates/widget\"\n\nglobal.application =\n  launch: ->\n    if url = prompt \"URL\", \"http://www.danielx.net/pixel-editor\"\n      document.body.appendChild Widget\n        title: \"Yolo\"\n        url: url\n\ndocument.body.appendChild require(\"./templates/main\")(application)\n",
+      "content": "# Probably want a bunch of garish widgets... pop-out, drag to move\n\n# Need to be able to launch the editor and create new applications/widgets\n\n# Viewers for various media types\n\n# It should be FUN!\n\n# Sample Use Case\n# Launch Editor\n# Create Widget\n# Save Widget\n# Launch Widget\n\n# What is a widget, a DOM node?\n# Maybe an object with an element property?\n# widget = Dealy(data, host)\n# document.body.appendChild widget.element()\n\n# How does a widget live in a package?\n\n# Apps will need some awareness of the OS for things like popping\n# up a save prompt or file picker.\n\nstyle = document.createElement \"style\"\nstyle.innerHTML = require \"./style\"\ndocument.head.appendChild style\n\nWidget = require \"./templates/widget\"\n\nglobal.application =\n  launch: ->\n    if url = prompt \"URL\", \"http://www.danielx.net/pixel-editor\"\n      document.body.appendChild Widget\n        title: \"Yolo\"\n        url: url\n\ndocument.body.appendChild require(\"./templates/main\")(application)\n",
       "mode": "100644",
       "type": "blob"
     },
@@ -196,7 +196,7 @@
     },
     "style.styl": {
       "path": "style.styl",
-      "content": "body\n  margin: 0\n\nwindow\n  display: flex\n  flex-direction: column\n  overflow: auto\n  position: absolute\n  resize: both\n  padding: 3px\n  border: 1px solid black\n\n  & > h2\n    margin: 0\n\n  & > iframe\n    border: none\n    width: 100%\n    flex: 2\n",
+      "content": "body\n  font-family: \"HelveticaNeue-Light\", \"Helvetica Neue Light\", \"Helvetica Neue\", Helvetica, Arial, \"Lucida Grande\", sans-serif\n  font-weigth: 300\n  margin: 0\n\nwindow\n  display: flex\n  flex-direction: column\n  overflow: auto\n  position: absolute\n  resize: both\n  padding: 3px\n  border: 1px solid gray\n\n  & > h2\n    background-color: blue\n    color: white\n    margin: 0\n    border-bottom: 1px solid gray\n\n  & > iframe\n    border: none\n    width: 100%\n    flex: 2\n",
       "mode": "100644"
     },
     "templates/main.jadelet": {
@@ -223,7 +223,7 @@
     },
     "style": {
       "path": "style",
-      "content": "module.exports = \"body {\\n  margin: 0;\\n}\\n\\nwindow {\\n  display: flex;\\n  overflow: auto;\\n  position: absolute;\\n  resize: both;\\n  padding: 3px;\\n  border: 1px solid black;\\n  -ms-flex-direction: column;\\n  -moz-flex-direction: column;\\n  -webkit-flex-direction: column;\\n  flex-direction: column;\\n}\\n\\nwindow > h2 {\\n  margin: 0;\\n}\\n\\nwindow > iframe {\\n  border: none;\\n  width: 100%;\\n  -ms-flex: 2;\\n  -moz-flex: 2;\\n  -webkit-flex: 2;\\n  flex: 2;\\n}\";",
+      "content": "module.exports = \"body {\\n  font-family: \\\"HelveticaNeue-Light\\\", \\\"Helvetica Neue Light\\\", \\\"Helvetica Neue\\\", Helvetica, Arial, \\\"Lucida Grande\\\", sans-serif;\\n  font-weigth: 300;\\n  margin: 0;\\n}\\n\\nwindow {\\n  display: flex;\\n  overflow: auto;\\n  position: absolute;\\n  resize: both;\\n  padding: 3px;\\n  border: 1px solid gray;\\n  -ms-flex-direction: column;\\n  -moz-flex-direction: column;\\n  -webkit-flex-direction: column;\\n  flex-direction: column;\\n}\\n\\nwindow > h2 {\\n  background-color: blue;\\n  color: white;\\n  margin: 0;\\n  border-bottom: 1px solid gray;\\n}\\n\\nwindow > iframe {\\n  border: none;\\n  width: 100%;\\n  -ms-flex: 2;\\n  -moz-flex: 2;\\n  -webkit-flex: 2;\\n  flex: 2;\\n}\";",
       "type": "blob"
     },
     "templates/main": {
