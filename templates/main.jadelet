@@ -1,3 +1,5 @@
+- Launcher = require "./launcher"
+
 desktop
-  .actions
-    button(click=@launch) Launch
+  = @launchers.map Launcher
+  .drag-fix

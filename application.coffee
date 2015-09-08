@@ -4,10 +4,15 @@ module.exports = ->
   self =
     launch: ->
       if url = prompt "URL", "http://www.danielx.net/pixel-editor"
-        document.body.appendChild Widget
+        document.getElementsByTagName("desktop")[0].appendChild Widget
           title: "Yolo"
           url: url
           zIndex: topIndex
+    launchers: [{
+      fn: ->
+        self.launch()
+      text: "Launch"
+    }]
 
   topIndex = 1
   raise = (appWindow) ->
@@ -23,8 +28,9 @@ module.exports = ->
   
     if target.classList.contains "handle"
       activeDrag = target.parentNode
-  
+
       raise(activeDrag)
+      document.getElementsByClassName("drag-fix")[0].style.zIndex = topIndex + 1
   
       initialPosition = activeDrag.getBoundingClientRect()
       initialMouse = e
@@ -39,6 +45,7 @@ module.exports = ->
       activeDrag.style.top = initialPosition.top + delta.y + "px"
   
   document.addEventListener "mouseup", (e) ->
+    document.getElementsByClassName("drag-fix")[0].style.zIndex = -1
     activeDrag = null
 
   return self
