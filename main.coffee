@@ -19,6 +19,9 @@
 
 # How does a widget live in a package?
 
+# Apps will need some awareness of the OS for things like popping
+# up a save prompt or file picker.
+
 style = document.createElement "style"
 style.innerHTML = require "./style"
 document.head.appendChild style
