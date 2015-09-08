@@ -41,6 +41,7 @@ activeDrag = null
 initialPosition = null
 initialMouse = null
 document.addEventListener "mousedown", (e) ->
+  console.log e
   target = e.target
 
   if target.classList.contains "handle"
