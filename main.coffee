@@ -36,3 +36,29 @@ global.application =
         url: url
 
 document.body.appendChild require("./templates/main")(application)
+
+activeDrag = null
+initialPosition = null
+initialMouse = null
+document.addEventListener "mousedown", (e) ->
+  target = e.target
+
+  if target.classList.contains "handle"
+    activeDrag = target.parentNode
+
+    initialPosition = activeDrag.getBoundingClientRect()
+    initialMouse = e
+
+document.addEventListener "mousemove", (e) ->
+  if activeDrag
+    console.log activeDrag
+
+    delta =
+      x: e.pageX - initialMouse.pageX
+      y: e.pageY - initialMouse.pageY
+
+    activeDrag.style.left = initialPosition.left + delta.x + "px"
+    activeDrag.style.top = initialPosition.top + delta.y + "px"
+
+document.addEventListener "mouseup", (e) ->
+  activeDrag = null
