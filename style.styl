@@ -31,6 +31,24 @@ window
     width: 100%
     flex: 2
 
+folder
+  display: block
+  width: 100%
+  height: 100%
+  overflow: auto
+
+  & > .launcher
+    cursor: pointer
+    width: 64px
+    margin: 1em
+    display: inline-flex
+    flex-direction: column
+    align-items: center
+
+    & > .icon
+      width: 48px
+      height: 48px
+
 desktop
   display: block
   width: 100%
@@ -44,15 +62,3 @@ desktop
     position: absolute
     top: 0
     left: 0
-
-  & > .launchers > .launcher
-    cursor: pointer
-    width: 64px
-    margin: 1em
-    display: inline-flex
-    flex-direction: column
-    align-items: center
-
-    & > .icon
-      width: 48px
-      height: 48px

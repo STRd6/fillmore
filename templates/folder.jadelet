@@ -1,0 +1,4 @@
+- Launcher = require "./launcher"
+
+folder
+  = @launchers.map Launcher
