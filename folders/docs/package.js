@@ -196,12 +196,12 @@
     },
     "style.styl": {
       "path": "style.styl",
-      "content": "html\n  height: 100%\n\nbody\n  font-family: \"HelveticaNeue-Light\", \"Helvetica Neue Light\", \"Helvetica Neue\", Helvetica, Arial, \"Lucida Grande\", sans-serif\n  font-weigth: 300\n  margin: 0\n  height: 100%\n\nwindow\n  background-color: white\n  display: flex\n  flex-direction: column\n  overflow: auto\n  position: absolute\n  resize: both\n  padding: 3px\n  border: 1px solid gray\n\n  & > h2\n    background-color: blue\n    color: white\n    margin: 0\n    border-bottom: 1px solid gray\n    \n    & > .close\n      float: right\n\n  & > iframe\n    border: none\n    width: 100%\n    flex: 2\n\ndesktop\n  display: block\n  width: 100%\n  height: 100%\n  position: relative\n\n  & > .drag-fix\n    z-Index: -1\n    width: 100%\n    height: 100%\n    position: absolute\n    top: 0\n    left: 0\n\n  & > .launchers > .launcher\n    cursor: pointer\n    width: 64px\n    margin: 1em\n    display: inline-flex\n    flex-direction: column\n    align-items: center\n\n    & > .icon\n      width: 48px\n      height: 48px\n",
+      "content": "html\n  height: 100%\n\nbody\n  font-family: \"HelveticaNeue-Light\", \"Helvetica Neue Light\", \"Helvetica Neue\", Helvetica, Arial, \"Lucida Grande\", sans-serif\n  font-weigth: 300\n  margin: 0\n  height: 100%\n\nwindow\n  background-color: white\n  display: flex\n  flex-direction: column\n  overflow: auto\n  position: absolute\n  resize: both\n  padding: 3px\n  border: 1px solid gray\n\n  & > h2\n    background-color: blue\n    color: white\n    margin: 0\n    border-bottom: 1px solid gray\n    \n    & > .close\n      float: right\n\n  & > iframe\n    border: none\n    width: 100%\n    flex: 2\n\nfolder\n  display: block\n  width: 100%\n  height: 100%\n  overflow: auto\n\n  & > .launcher\n    cursor: pointer\n    width: 64px\n    margin: 1em\n    display: inline-flex\n    flex-direction: column\n    align-items: center\n\n    & > .icon\n      width: 48px\n      height: 48px\n\ndesktop\n  display: block\n  width: 100%\n  height: 100%\n  position: relative\n\n  & > .drag-fix\n    z-Index: -1\n    width: 100%\n    height: 100%\n    position: absolute\n    top: 0\n    left: 0\n",
       "mode": "100644"
     },
     "templates/main.jadelet": {
       "path": "templates/main.jadelet",
-      "content": "- Launcher = require \"./launcher\"\n\ndesktop\n  .launchers\n    = @launchers.map Launcher\n  .drag-fix\n",
+      "content": "- Folder = require \"./folder\"\n\ndesktop\n  = Folder launchers: @launchers\n  .drag-fix\n",
       "mode": "100644"
     },
     "application.coffee": {
@@ -221,7 +221,12 @@
     },
     "templates/window.jadelet": {
       "path": "templates/window.jadelet",
-      "content": "window(style=\"z-index: #{@zIndex}; width: #{@width}; height: #{@height};\")\n  - close = (e) ->\n    - e.target.parentNode.parentNode.remove()\n  h2.handle\n    = @title\n    span.close(click=close) X\n  = @content\n",
+      "content": "window(style=\"z-index: #{@zIndex}; width: #{@width}; height: #{@height}; top: 20px; left: 20px\")\n  - close = (e) ->\n    - e.target.parentNode.parentNode.remove()\n  h2.handle\n    = @title\n    span.close(click=close) X\n  = @content\n",
+      "mode": "100644"
+    },
+    "templates/folder.jadelet": {
+      "path": "templates/folder.jadelet",
+      "content": "- Launcher = require \"./launcher\"\n\nfolder\n  = @launchers.map Launcher\n",
       "mode": "100644"
     }
   },
@@ -243,12 +248,12 @@
     },
     "style": {
       "path": "style",
-      "content": "module.exports = \"html {\\n  height: 100%;\\n}\\n\\nbody {\\n  font-family: \\\"HelveticaNeue-Light\\\", \\\"Helvetica Neue Light\\\", \\\"Helvetica Neue\\\", Helvetica, Arial, \\\"Lucida Grande\\\", sans-serif;\\n  font-weigth: 300;\\n  margin: 0;\\n  height: 100%;\\n}\\n\\nwindow {\\n  background-color: white;\\n  display: flex;\\n  overflow: auto;\\n  position: absolute;\\n  resize: both;\\n  padding: 3px;\\n  border: 1px solid gray;\\n  -ms-flex-direction: column;\\n  -moz-flex-direction: column;\\n  -webkit-flex-direction: column;\\n  flex-direction: column;\\n}\\n\\nwindow > h2 > .close {\\n  float: right;\\n}\\n\\nwindow > h2 {\\n  background-color: blue;\\n  color: white;\\n  margin: 0;\\n  border-bottom: 1px solid gray;\\n}\\n\\nwindow > iframe {\\n  border: none;\\n  width: 100%;\\n  -ms-flex: 2;\\n  -moz-flex: 2;\\n  -webkit-flex: 2;\\n  flex: 2;\\n}\\n\\ndesktop {\\n  display: block;\\n  width: 100%;\\n  height: 100%;\\n  position: relative;\\n}\\n\\ndesktop > .drag-fix {\\n  z-Index: -1;\\n  width: 100%;\\n  height: 100%;\\n  position: absolute;\\n  top: 0;\\n  left: 0;\\n}\\n\\ndesktop > .launchers > .launcher > .icon {\\n  width: 48px;\\n  height: 48px;\\n}\\n\\ndesktop > .launchers > .launcher {\\n  cursor: pointer;\\n  width: 64px;\\n  margin: 1em;\\n  display: inline-flex;\\n  align-items: center;\\n  -ms-flex-direction: column;\\n  -moz-flex-direction: column;\\n  -webkit-flex-direction: column;\\n  flex-direction: column;\\n}\";",
+      "content": "module.exports = \"html {\\n  height: 100%;\\n}\\n\\nbody {\\n  font-family: \\\"HelveticaNeue-Light\\\", \\\"Helvetica Neue Light\\\", \\\"Helvetica Neue\\\", Helvetica, Arial, \\\"Lucida Grande\\\", sans-serif;\\n  font-weigth: 300;\\n  margin: 0;\\n  height: 100%;\\n}\\n\\nwindow {\\n  background-color: white;\\n  display: flex;\\n  overflow: auto;\\n  position: absolute;\\n  resize: both;\\n  padding: 3px;\\n  border: 1px solid gray;\\n  -ms-flex-direction: column;\\n  -moz-flex-direction: column;\\n  -webkit-flex-direction: column;\\n  flex-direction: column;\\n}\\n\\nwindow > h2 > .close {\\n  float: right;\\n}\\n\\nwindow > h2 {\\n  background-color: blue;\\n  color: white;\\n  margin: 0;\\n  border-bottom: 1px solid gray;\\n}\\n\\nwindow > iframe {\\n  border: none;\\n  width: 100%;\\n  -ms-flex: 2;\\n  -moz-flex: 2;\\n  -webkit-flex: 2;\\n  flex: 2;\\n}\\n\\nfolder {\\n  display: block;\\n  width: 100%;\\n  height: 100%;\\n  overflow: auto;\\n}\\n\\nfolder > .launcher > .icon {\\n  width: 48px;\\n  height: 48px;\\n}\\n\\nfolder > .launcher {\\n  cursor: pointer;\\n  width: 64px;\\n  margin: 1em;\\n  display: inline-flex;\\n  align-items: center;\\n  -ms-flex-direction: column;\\n  -moz-flex-direction: column;\\n  -webkit-flex-direction: column;\\n  flex-direction: column;\\n}\\n\\ndesktop {\\n  display: block;\\n  width: 100%;\\n  height: 100%;\\n  position: relative;\\n}\\n\\ndesktop > .drag-fix {\\n  z-Index: -1;\\n  width: 100%;\\n  height: 100%;\\n  position: absolute;\\n  top: 0;\\n  left: 0;\\n}\";",
       "type": "blob"
     },
     "templates/main": {
       "path": "templates/main",
-      "content": "module.exports = function(data) {\n  \"use strict\";\n  return (function() {\n    var Launcher, __root;\n    __root = require(\"/lib/hamlet-runtime\")(this);\n    Launcher = require(\"./launcher\");\n    __root.buffer(__root.element(\"desktop\", this, {}, function(__root) {\n      __root.buffer(__root.element(\"div\", this, {\n        \"class\": [\"launchers\"]\n      }, function(__root) {\n        __root.buffer(this.launchers.map(Launcher));\n      }));\n      __root.buffer(__root.element(\"div\", this, {\n        \"class\": [\"drag-fix\"]\n      }, function(__root) {}));\n    }));\n    return __root.root;\n  }).call(data);\n};\n",
+      "content": "module.exports = function(data) {\n  \"use strict\";\n  return (function() {\n    var Folder, __root;\n    __root = require(\"/lib/hamlet-runtime\")(this);\n    Folder = require(\"./folder\");\n    __root.buffer(__root.element(\"desktop\", this, {}, function(__root) {\n      __root.buffer(Folder({\n        launchers: this.launchers\n      }));\n      __root.buffer(__root.element(\"div\", this, {\n        \"class\": [\"drag-fix\"]\n      }, function(__root) {}));\n    }));\n    return __root.root;\n  }).call(data);\n};\n",
       "type": "blob"
     },
     "application": {
@@ -268,7 +273,12 @@
     },
     "templates/window": {
       "path": "templates/window",
-      "content": "module.exports = function(data) {\n  \"use strict\";\n  return (function() {\n    var __root;\n    __root = require(\"/lib/hamlet-runtime\")(this);\n    __root.buffer(__root.element(\"window\", this, {\n      \"style\": \"z-index: \" + this.zIndex + \"; width: \" + this.width + \"; height: \" + this.height + \";\"\n    }, function(__root) {\n      var close;\n      close = function(e) {\n        return e.target.parentNode.parentNode.remove();\n      };\n      __root.buffer(__root.element(\"h2\", this, {\n        \"class\": [\"handle\"]\n      }, function(__root) {\n        __root.buffer(this.title);\n        __root.buffer(__root.element(\"span\", this, {\n          \"class\": [\"close\"],\n          \"click\": close\n        }, function(__root) {\n          __root.buffer(\"X\\n\");\n        }));\n      }));\n      __root.buffer(this.content);\n    }));\n    return __root.root;\n  }).call(data);\n};\n",
+      "content": "module.exports = function(data) {\n  \"use strict\";\n  return (function() {\n    var __root;\n    __root = require(\"/lib/hamlet-runtime\")(this);\n    __root.buffer(__root.element(\"window\", this, {\n      \"style\": \"z-index: \" + this.zIndex + \"; width: \" + this.width + \"; height: \" + this.height + \"; top: 20px; left: 20px\"\n    }, function(__root) {\n      var close;\n      close = function(e) {\n        return e.target.parentNode.parentNode.remove();\n      };\n      __root.buffer(__root.element(\"h2\", this, {\n        \"class\": [\"handle\"]\n      }, function(__root) {\n        __root.buffer(this.title);\n        __root.buffer(__root.element(\"span\", this, {\n          \"class\": [\"close\"],\n          \"click\": close\n        }, function(__root) {\n          __root.buffer(\"X\\n\");\n        }));\n      }));\n      __root.buffer(this.content);\n    }));\n    return __root.root;\n  }).call(data);\n};\n",
+      "type": "blob"
+    },
+    "templates/folder": {
+      "path": "templates/folder",
+      "content": "module.exports = function(data) {\n  \"use strict\";\n  return (function() {\n    var Launcher, __root;\n    __root = require(\"/lib/hamlet-runtime\")(this);\n    Launcher = require(\"./launcher\");\n    __root.buffer(__root.element(\"folder\", this, {}, function(__root) {\n      __root.buffer(this.launchers.map(Launcher));\n    }));\n    return __root.root;\n  }).call(data);\n};\n",
       "type": "blob"
     },
     "lib/hamlet-runtime": {
