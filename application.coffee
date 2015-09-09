@@ -9,8 +9,8 @@ module.exports = ->
       if url = prompt "URL", "http://www.danielx.net/pixel-editor"
         addWidget url,
           title: url
-          width: "640px"
-          height: "480px"
+          width: 640
+          height: 480
 
     launchers: Observable [{
       fn: ->
@@ -27,24 +27,24 @@ module.exports = ->
       fn: ->
         addWidget "http://www.danielx.net/pixel-editor",
           title: "Pixel Editor"
-          width: "640px"
-          height: "480px"
+          width: 640
+          height: 480
       icon: "http://dist.alternativeto.net/icons/microsoft-paint_3495.png?width=50&height=50&mode=crop&anchor=middlecenter"
       text: "Pixel Editor"
     }, {
       fn: ->
         addWidget "http://distri.github.io/text/",
           title: "notepad.exe"
-          width: "400px"
-          height: "300px"
+          width: 400
+          height: 300
       icon: "http://files.softicons.com/download/application-icons/sleek-xp-software-icons-by-deleket/png/32/Notepad.png"
       text: "notepad.exe"
     }, {
       fn: ->
         openFolder
           title: "Games"
-          width: "400px"
-          height: "300px"
+          width: 400
+          height: 300
           zIndex: topIndex
       icon: "http://findicons.com/files/icons/2256/hamburg/32/folder.png"
       text: "Games"
@@ -54,9 +54,16 @@ module.exports = ->
     icon: "http://0.pixiecdn.com/sprites/26528/original.png"
     url: "http://contrasaur.us"
     params:
-      width: "640px"
-      height: "600px"
-    text: "Contrasaurus"
+      width: 640
+      height: 600
+    text: "Contrasaurus [Broken]"
+  }, {
+    icon: "http://0.pixiecdn.com/sprites/131792/original."
+    url: "http://danielx.net/ld33"
+    params:
+      width: 650
+      height: 520
+    text: "Dungeon of Sadness"
   }].map (data) ->
     fn: ->
       params = extend
@@ -84,6 +91,12 @@ module.exports = ->
   addWindow = (params) ->
     console.log params
     params.zIndex ?= topIndex
+
+    if typeof params.width is "number"
+      params.width = params.width + "px"
+
+    if typeof params.height is "number"
+      params.height = params.height + "px"
 
     document.getElementsByTagName("desktop")[0].appendChild Window params
 
