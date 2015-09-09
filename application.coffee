@@ -5,19 +5,33 @@ module.exports = ->
   self =
     launch: ->
       if url = prompt "URL", "http://www.danielx.net/pixel-editor"
-        document.getElementsByTagName("desktop")[0].appendChild Widget
-          title: "Yolo"
+        addWidget
+          title: url
           url: url
           zIndex: topIndex
+
     launchers: Observable [{
       fn: ->
         self.launch()
       text: "Launch"
     }, {
       fn: ->
-        self.launchers.push this
-      text: "Test"
+        addWidget
+          title: "Theremin"
+          url: "http://distri.github.io/synth"
+          zIndex: topIndex
+      text: "Theremin"
+    }, {
+      fn: ->
+        addWidget
+          title: "Pixel Editor"
+          url: "http://www.danielx.net/pixel-editor"
+          zIndex: topIndex
+      text: "Pixel Editor"
     }]
+
+  addWidget = (params) ->
+    document.getElementsByTagName("desktop")[0].appendChild Widget params
 
   topIndex = 1
   raise = (appWindow) ->

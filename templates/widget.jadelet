@@ -1,3 +1,7 @@
 window(style="z-index: #{@zIndex};")
-  h2.handle= @title
+  - close = (e) ->
+    - e.target.parentNode.parentNode.remove()
+  h2.handle
+    = @title
+    span.close(click=close) X
   iframe(src=@url)
