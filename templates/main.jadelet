@@ -1,6 +1,5 @@
-- Launcher = require "./launcher"
+- Folder = require "./folder"
 
 desktop
-  .launchers
-    = @launchers.map Launcher
+  = Folder launchers: @launchers
   .drag-fix

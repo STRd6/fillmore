@@ -29,6 +29,14 @@
 # Save the song in your music folder
 # Browse your music folder and play the song
 
+# Use Case - Scriptin'
+# Launch notepad.exe
+# Type in some JavaScript
+#     alert('haxor');
+# Save as leet.js
+# Click leet.js
+# JS Executes!
+
 style = document.createElement "style"
 style.innerHTML = require "./style"
 document.head.appendChild style
