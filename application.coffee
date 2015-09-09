@@ -1,3 +1,4 @@
+require "cornerstone"
 Widget = require "./templates/widget"
 
 module.exports = ->
@@ -8,10 +9,14 @@ module.exports = ->
           title: "Yolo"
           url: url
           zIndex: topIndex
-    launchers: [{
+    launchers: Observable [{
       fn: ->
         self.launch()
       text: "Launch"
+    }, {
+      fn: ->
+        self.launchers.push this
+      text: "Test"
     }]
 
   topIndex = 1

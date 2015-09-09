@@ -1,5 +1,6 @@
 - Launcher = require "./launcher"
 
 desktop
-  = @launchers.map Launcher
+  .launchers
+    = @launchers.map Launcher
   .drag-fix
