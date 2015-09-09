@@ -1,14 +1,15 @@
 require "cornerstone"
 Widget = require "./templates/widget"
+Window = require "./templates/window"
 
 module.exports = ->
   self =
     launch: ->
       if url = prompt "URL", "http://www.danielx.net/pixel-editor"
-        addWidget
+        addWidget url,
           title: url
-          url: url
-          zIndex: topIndex
+          width: "640px"
+          height: "480px"
 
     launchers: Observable [{
       fn: ->
@@ -17,37 +18,49 @@ module.exports = ->
       text: "Launch"
     }, {
       fn: ->
-        addWidget
+        addWidget "http://distri.github.io/synth",
           title: "Theremin"
-          url: "http://distri.github.io/synth"
-          zIndex: topIndex
       icon: "http://osx.iusethis.com/icon/osx/theremin.png"
       text: "Theremin"
     }, {
       fn: ->
-        addWidget
+        addWidget "http://www.danielx.net/pixel-editor",
           title: "Pixel Editor"
-          url: "http://www.danielx.net/pixel-editor"
-          zIndex: topIndex
+          width: "640px"
+          height: "480px"
       icon: "http://dist.alternativeto.net/icons/microsoft-paint_3495.png?width=50&height=50&mode=crop&anchor=middlecenter"
       text: "Pixel Editor"
     }, {
       fn: ->
-        addWidget
+        addWidget "http://distri.github.io/text/",
           title: "notepad.exe"
-          url: "http://distri.github.io/text/"
-          zIndex: topIndex
+          width: "400px"
+          height: "300px"
       icon: "http://files.softicons.com/download/application-icons/sleek-xp-software-icons-by-deleket/png/32/Notepad.png"
       text: "notepad.exe"
     }, {
       fn: ->
-        alert "TODO: Implement folders :P"
+        openFolder
+          width: "400px"
+          height: "300px"
+          zIndex: topIndex
       icon: "http://findicons.com/files/icons/2256/hamburg/32/folder.png"
       text: "Games"
     }]
 
-  addWidget = (params) ->
-    document.getElementsByTagName("desktop")[0].appendChild Widget params
+  openFolder = ->
+    document.getElementsByTagName("desktop")[0].appendChild Folder params
+
+  addWidget = (url, params) ->
+    params.content = Widget
+      url: url
+
+    params.zIndex ?= topIndex
+
+    addWindow params
+
+  addWindow = (params) ->
+    document.getElementsByTagName("desktop")[0].appendChild Window params
 
   topIndex = 1
   raise = (appWindow) ->

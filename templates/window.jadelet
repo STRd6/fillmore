@@ -1,0 +1,7 @@
+window(style="z-index: #{@zIndex}; width: #{@width}; height: #{@height};")
+  - close = (e) ->
+    - e.target.parentNode.parentNode.remove()
+  h2.handle
+    = @title
+    span.close(click=close) X
+  = @content
