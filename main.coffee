@@ -6,12 +6,6 @@
 
 # It should be FUN!
 
-# Sample Use Case
-# Launch Editor
-# Create Widget
-# Save Widget
-# Launch Widget
-
 # What is a widget, a DOM node?
 # Maybe an object with an element property?
 # widget = Dealy(data, host)
@@ -21,6 +15,19 @@
 
 # Apps will need some awareness of the OS for things like popping
 # up a save prompt or file picker.
+
+# Use Case - IDE
+# Launch Editor
+# Create Widget
+# Save Widget
+# Launch Widget
+
+# Use Case - Audio Recording
+# Launch the Theremin
+# Launch the Sound Recorder
+# Record a Jam Session on the Theremin in the Sound Recorder
+# Save the song in your music folder
+# Browse your music folder and play the song
 
 style = document.createElement "style"
 style.innerHTML = require "./style"
