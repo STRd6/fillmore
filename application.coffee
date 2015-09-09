@@ -3,6 +3,8 @@ Folder = require "./templates/folder"
 Widget = require "./templates/widget"
 Window = require "./templates/window"
 
+Filesystem = require "./filesystem"
+
 module.exports = ->
   self =
     launch: ->
@@ -12,68 +14,43 @@ module.exports = ->
           width: 640
           height: 480
 
-    launchers: Observable [{
-      fn: ->
-        self.launch()
-      icon: "http://iconizer.net/files/Toolbar_icon_set_2/orig/car.png"
-      text: "Launch"
-    }, {
-      fn: ->
-        addWidget "http://distri.github.io/synth",
-          title: "Theremin"
-      icon: "http://osx.iusethis.com/icon/osx/theremin.png"
-      text: "Theremin"
-    }, {
-      fn: ->
-        addWidget "http://www.danielx.net/pixel-editor",
-          title: "Pixel Editor"
-          width: 640
-          height: 480
-      icon: "http://dist.alternativeto.net/icons/microsoft-paint_3495.png?width=50&height=50&mode=crop&anchor=middlecenter"
-      text: "Pixel Editor"
-    }, {
-      fn: ->
-        addWidget "http://distri.github.io/text/",
-          title: "notepad.exe"
-          save: true
-          width: 400
-          height: 300
-      icon: "http://files.softicons.com/download/application-icons/sleek-xp-software-icons-by-deleket/png/32/Notepad.png"
-      text: "notepad.exe"
-    }, {
-      fn: ->
-        openFolder
-          title: "Games"
-          width: 400
-          height: 300
-          zIndex: topIndex
+  handlers =
+    launch: (file) ->
+      openWidget JSON.parse(file.content())
+
+    folder: (file) ->
+      openFolder JSON.parse(file.content())
+
+  filePresenters =
+    launch: (file) ->
+      data = JSON.parse(file.content())
+
+      title: data.title
+      icon: data.icon
+    folder: (file) ->
+      data = JSON.parse(file.content())
+
+      title: data.title
       icon: "http://findicons.com/files/icons/2256/hamburg/32/folder.png"
-      text: "Games"
-    }]
 
-  games = [{
-    icon: "http://0.pixiecdn.com/sprites/26528/original.png"
-    url: "http://contrasaur.us"
-    params:
-      width: 640
-      height: 600
-    text: "Contrasaurus [Broken]"
-  }, {
-    icon: "http://0.pixiecdn.com/sprites/131792/original."
-    url: "http://danielx.net/ld33"
-    params:
-      width: 650
-      height: 520
-    text: "Dungeon of Sadness"
-  }].map (data) ->
-    fn: ->
-      params = extend
-        title: data.text
-      , data.params
+  open = (file) ->
+    if handler = handlers[file.extension()]
+      handler(file)
+    else
+      alert "Don't know about this kind of file"
 
-      addWidget data.url, params
-    text: data.text
-    icon: data.icon
+  presentFile = (file) ->
+    if presenter = filePresenters[file.extension()]
+      extend presenter(file),
+        fn: ->
+          open file
+    else
+      title: file.path
+      icon: "https://cdn2.iconfinder.com/data/icons/glossy_ecommerce_icons/question.png"
+      fn: ->
+        open file
+
+  self.launchers = Filesystem().files.map presentFile
 
   openFolder = (params) ->
     console.log games
@@ -101,9 +78,9 @@ module.exports = ->
     icon: "http://files.softicons.com/download/application-icons/sleek-xp-software-icons-by-deleket/png/32/Notepad.png"
     text: name
 
-  addWidget = (url, params) ->
+  openWidget = (params) ->
     content = Widget
-      url: url
+      url: params.url
 
     textValue = ""
     initialValue = params.value
