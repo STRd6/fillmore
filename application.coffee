@@ -28,6 +28,13 @@ module.exports = ->
           url: "http://www.danielx.net/pixel-editor"
           zIndex: topIndex
       text: "Pixel Editor"
+    }, {
+      fn: ->
+        addWidget
+          title: "notepad.exe"
+          url: "http://distri.github.io/text/"
+          zIndex: topIndex
+      text: "notepad.exe"
     }]
 
   addWidget = (params) ->
