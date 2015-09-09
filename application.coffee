@@ -1,4 +1,5 @@
 require "cornerstone"
+Folder = require "./templates/folder"
 Widget = require "./templates/widget"
 Window = require "./templates/window"
 
@@ -41,6 +42,7 @@ module.exports = ->
     }, {
       fn: ->
         openFolder
+          title: "Games"
           width: "400px"
           height: "300px"
           zIndex: topIndex
@@ -48,18 +50,41 @@ module.exports = ->
       text: "Games"
     }]
 
-  openFolder = ->
-    document.getElementsByTagName("desktop")[0].appendChild Folder params
+  games = [{
+    icon: "http://0.pixiecdn.com/sprites/26528/original.png"
+    url: "http://contrasaur.us"
+    params:
+      width: "640px"
+      height: "600px"
+    text: "Contrasaurus"
+  }].map (data) ->
+    fn: ->
+      params = extend
+        title: data.text
+      , data.params
+  
+      addWidget data.url, params
+    text: data.text
+    icon: data.icon
+
+  openFolder = (params) ->
+    console.log games
+
+    params.content = Folder
+      launchers: games
+
+    addWindow params
 
   addWidget = (url, params) ->
     params.content = Widget
       url: url
 
-    params.zIndex ?= topIndex
-
     addWindow params
 
   addWindow = (params) ->
+    console.log params
+    params.zIndex ?= topIndex
+
     document.getElementsByTagName("desktop")[0].appendChild Window params
 
   topIndex = 1
