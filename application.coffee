@@ -35,6 +35,7 @@ module.exports = ->
       fn: ->
         addWidget "http://distri.github.io/text/",
           title: "notepad.exe"
+          save: true
           width: 400
           height: 300
       icon: "http://files.softicons.com/download/application-icons/sleek-xp-software-icons-by-deleket/png/32/Notepad.png"
@@ -69,7 +70,7 @@ module.exports = ->
       params = extend
         title: data.text
       , data.params
-  
+
       addWidget data.url, params
     text: data.text
     icon: data.icon
@@ -82,9 +83,51 @@ module.exports = ->
 
     addWindow params
 
+  sendData = (contentWindow, data) ->
+    contentWindow.postMessage
+      method: "value"
+      params: [data]
+    , "*"
+
+  "http://icons16x16.com/folders/Save/objects_029.gif"
+
+  TextFile = (name, content) ->
+    fn: ->
+      addWidget "http://distri.github.io/text/",
+        title: "notepad.exe"
+        save: true
+        value: content
+        width: 400
+        height: 300
+
+    icon: "http://files.softicons.com/download/application-icons/sleek-xp-software-icons-by-deleket/png/32/Notepad.png"
+    text: name
+
   addWidget = (url, params) ->
-    params.content = Widget
+    content = Widget
       url: url
+
+    textValue = ""
+    initialValue = params.value
+
+    if params.save
+      window.addEventListener "message", (e) ->
+        if e.source is content.contentWindow
+          if e.data.status is "ready"
+            sendData content.contentWindow, initialValue
+
+          value = e.data.value
+          if value
+            textValue = value
+
+      # Add a save dealy
+      params.save = ->
+        name = prompt "File name", "untitled.txt"
+
+        if name
+          self.launchers.push TextFile(name, textValue)
+
+    params.content = content
 
     addWindow params
 
@@ -103,33 +146,33 @@ module.exports = ->
   topIndex = 1
   raise = (appWindow) ->
     topIndex += 1
-  
+
     appWindow.style.zIndex = topIndex
-  
+
   activeDrag = null
   initialPosition = null
   initialMouse = null
   document.addEventListener "mousedown", (e) ->
     target = e.target
-  
+
     if target.classList.contains "handle"
       activeDrag = target.parentNode
 
       raise(activeDrag)
       document.getElementsByClassName("drag-fix")[0].style.zIndex = topIndex + 1
-  
+
       initialPosition = activeDrag.getBoundingClientRect()
       initialMouse = e
-  
+
   document.addEventListener "mousemove", (e) ->
     if activeDrag
       delta =
         x: e.pageX - initialMouse.pageX
         y: e.pageY - initialMouse.pageY
-  
+
       activeDrag.style.left = initialPosition.left + delta.x + "px"
       activeDrag.style.top = initialPosition.top + delta.y + "px"
-  
+
   document.addEventListener "mouseup", (e) ->
     document.getElementsByClassName("drag-fix")[0].style.zIndex = -1
     activeDrag = null

@@ -4,4 +4,6 @@ window(style="z-index: #{@zIndex}; width: #{@width}; height: #{@height}; top: 20
   h2.handle
     = @title
     span.close(click=close) X
+    - if @save
+      span.save(click=@save) S
   = @content
