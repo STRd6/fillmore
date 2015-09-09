@@ -13,6 +13,7 @@ module.exports = ->
     launchers: Observable [{
       fn: ->
         self.launch()
+      icon: "http://iconizer.net/files/Toolbar_icon_set_2/orig/car.png"
       text: "Launch"
     }, {
       fn: ->
@@ -20,6 +21,7 @@ module.exports = ->
           title: "Theremin"
           url: "http://distri.github.io/synth"
           zIndex: topIndex
+      icon: "http://osx.iusethis.com/icon/osx/theremin.png"
       text: "Theremin"
     }, {
       fn: ->
@@ -27,6 +29,7 @@ module.exports = ->
           title: "Pixel Editor"
           url: "http://www.danielx.net/pixel-editor"
           zIndex: topIndex
+      icon: "http://dist.alternativeto.net/icons/microsoft-paint_3495.png?width=50&height=50&mode=crop&anchor=middlecenter"
       text: "Pixel Editor"
     }, {
       fn: ->
@@ -34,7 +37,13 @@ module.exports = ->
           title: "notepad.exe"
           url: "http://distri.github.io/text/"
           zIndex: topIndex
+      icon: "http://files.softicons.com/download/application-icons/sleek-xp-software-icons-by-deleket/png/32/Notepad.png"
       text: "notepad.exe"
+    }, {
+      fn: ->
+        alert "TODO: Implement folders :P"
+      icon: "http://findicons.com/files/icons/2256/hamburg/32/folder.png"
+      text: "Games"
     }]
 
   addWidget = (params) ->
