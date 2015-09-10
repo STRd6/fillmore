@@ -58,6 +58,11 @@ module.exports = Filesystem = (I={}, self=Model(I)) ->
         width: 650
         height: 520
         title: "Dungeon of Sadness"
+    }, {
+      path: "System/Boot/handlers.js"
+      content: """
+        
+      """
     }]
 
   self.attrModels "files", File

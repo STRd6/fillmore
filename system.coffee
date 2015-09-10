@@ -6,6 +6,11 @@ Filesystem = require "./filesystem"
 
 module.exports = (I={}, self=Model(I)) ->
   self.extend
+    # Execute JavaScript code in a fresh context
+    # with `system` available
+    exec: (code) ->
+      Function("system", code)(self)
+
     launch: ->
       if url = prompt "URL", "http://www.danielx.net/pixel-editor"
         addWidget url,
@@ -58,7 +63,7 @@ module.exports = (I={}, self=Model(I)) ->
         fn: ->
           open file
     else
-      title: file.path
+      title: file.path().split('/').last()
       icon: "http://files.softicons.com/download/toolbar-icons/iconza-grey-icons-by-turbomilk/png/32x32/document.png"
       fn: ->
         open file
@@ -117,7 +122,6 @@ module.exports = (I={}, self=Model(I)) ->
     ;
 
   self.registerHandler "js", (file) ->
-    Function(file.content())()
-
+    self.exec(file.content())
 
   return self
