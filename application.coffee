@@ -14,24 +14,38 @@ module.exports = ->
           width: 640
           height: 480
 
-  handlers =
-    launch: (file) ->
-      openWidget JSON.parse(file.content())
+    filesystem: ->
+      filesystem
 
+  handlers =
     folder: (file) ->
       openFolder JSON.parse(file.content())
 
-  filePresenters =
     launch: (file) ->
-      data = JSON.parse(file.content())
+      openWidget JSON.parse(file.content())
 
-      title: data.title
-      icon: data.icon
+    txt: (file) ->
+      console.log file
+      # Launch text editor
+      # Initialize with value
+      ;
+
+  filePresenters =
     folder: (file) ->
       data = JSON.parse(file.content())
 
       title: data.title
       icon: "http://findicons.com/files/icons/2256/hamburg/32/folder.png"
+
+    launch: (file) ->
+      data = JSON.parse(file.content())
+
+      title: data.title
+      icon: data.icon
+
+    txt: (file) ->
+      icon: "http://files.softicons.com/download/application-icons/sleek-xp-software-icons-by-deleket/png/32/Notepad.png"
+      title: file.path()
 
   open = (file) ->
     if handler = handlers[file.extension()]
@@ -50,7 +64,9 @@ module.exports = ->
       fn: ->
         open file
 
-  self.launchers = Filesystem().files.map presentFile
+  filesystem = Filesystem()
+  self.launchers = Observable ->
+    filesystem.files.map presentFile
 
   openFolder = (params) ->
     console.log games
@@ -65,18 +81,6 @@ module.exports = ->
       method: "value"
       params: [data]
     , "*"
-
-  TextFile = (name, content) ->
-    fn: ->
-      addWidget "http://distri.github.io/text/",
-        title: "notepad.exe"
-        save: true
-        value: content
-        width: 400
-        height: 300
-
-    icon: "http://files.softicons.com/download/application-icons/sleek-xp-software-icons-by-deleket/png/32/Notepad.png"
-    text: name
 
   openWidget = (params) ->
     content = Widget
@@ -102,7 +106,9 @@ module.exports = ->
         name = prompt "File name", "untitled.txt"
 
         if name
-          self.launchers.push TextFile(name, textValue)
+          self.filesystem().files.push Filesystem.File
+            path: name
+            content: textValue
 
     params.content = content
 

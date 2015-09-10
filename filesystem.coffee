@@ -16,7 +16,7 @@ File = (I={}, self=Model(I)) ->
 
   return self
 
-module.exports = (I={}, self=Model(I)) ->
+module.exports = Filesystem = (I={}, self=Model(I)) ->
   defaults I,
     files: [{
       path: "pixel.launch"
@@ -68,3 +68,5 @@ module.exports = (I={}, self=Model(I)) ->
   self.attrModels "files", File
 
   return self
+
+Filesystem.File = File
