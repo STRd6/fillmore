@@ -43,12 +43,7 @@ module.exports = Filesystem = (I={}, self=Model(I)) ->
         width: 400
         height: 300
     }, {
-      path: "games.folder"
-      content: JSON.stringify
-        title: "Games"
-        path: "games/"
-    }, {
-      path: "games/contrasaurus.launch"
+      path: "Games/contrasaurus.launch"
       content: JSON.stringify
         icon: "http://0.pixiecdn.com/sprites/26528/original.png"
         url: "http://contrasaur.us"
@@ -56,7 +51,7 @@ module.exports = Filesystem = (I={}, self=Model(I)) ->
         height: 600
         title: "Contrasaurus [Broken]"
     }, {
-      path: "games/dungeon.launch"
+      path: "Games/Ludum Dare/dungeon.launch"
       content: JSON.stringify
         icon: "http://0.pixiecdn.com/sprites/131792/original."
         url: "http://danielx.net/ld33"
@@ -66,6 +61,30 @@ module.exports = Filesystem = (I={}, self=Model(I)) ->
     }]
 
   self.attrModels "files", File
+
+  self.extend
+    filesIn: (directory) ->
+      self.files().filter (file) ->
+        path = file.path()
+
+        if path.startsWith(directory)
+          rest = path.replace(directory, '')
+
+          rest.indexOf('/') is -1
+
+    foldersIn: (directory) ->
+      dirHash = self.files().map (file) ->
+        file.path()
+      .filter (path) ->
+        if path.startsWith(directory)
+          rest = path.replace(directory, '')
+
+          rest.indexOf('/') > 0
+
+      .eachWithObject {}, (path, hash) ->
+        hash[path.replace(directory, '').split('/')[0]] = true
+
+      Object.keys(dirHash)
 
   return self
 
