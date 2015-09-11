@@ -50,9 +50,7 @@ document.body.appendChild require("./templates/main")(system)
 urlsafebase64 = require "./lib/urlsafebase64"
 
 arrayBuffer = new ArrayBuffer(32)
-console.log SHA256(CryptoJS.lib.WordArray.create(arrayBuffer)).toString()
-
-crypto.subtle.digest "SHA-256", arrayBuffer
-.then urlsafebase64
-.then (r) ->
-  console.log r
+hash = SHA256(CryptoJS.lib.WordArray.create(arrayBuffer))
+base64 = hash.toString(CryptoJS.enc.Base64)
+urlSafeBase64 = base64.replace(/\+/g, '-').replace(/\//g, '_').replace(/\=/g, "")
+console.log urlSafeBase64
