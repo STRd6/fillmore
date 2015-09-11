@@ -4,6 +4,9 @@ File = (I={}, self=Model(I)) ->
   self.attrObservable "path", "content", "type"
 
   self.extend
+    name: ->
+      self.path().split('/').last()
+
     extension: ->
       self.extensions().last()
 
@@ -34,10 +37,16 @@ module.exports = Filesystem = (I={}, self=Model(I)) ->
         url: "http://distri.github.io/synth"
         icon: "http://osx.iusethis.com/icon/osx/theremin.png"
     }, {
+      path: "recorder.launch"
+      content: JSON.stringify
+        title: "Sound Recorder"
+        url: "http://distri.github.io/sound-recorder/"
+        icon: "http://iconizer.net/files/Tango/orig/audio-input-microphone.png"
+    }, {
       path: "text.launch"
       content: JSON.stringify
         title: "notepad.exe"
-        url:"http://distri.github.io/text/",
+        url: "http://distri.github.io/text/",
         icon: "http://files.softicons.com/download/application-icons/sleek-xp-software-icons-by-deleket/png/32/Notepad.png"
         save: true
         width: 400

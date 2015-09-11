@@ -11,13 +11,6 @@ module.exports = (I={}, self=Model(I)) ->
     exec: (code) ->
       Function("system", code)(self)
 
-    launch: ->
-      if url = prompt "URL", "http://www.danielx.net/pixel-editor"
-        addWidget url,
-          title: url
-          width: 640
-          height: 480
-
     filesystem: ->
       filesystem
 
@@ -116,10 +109,11 @@ module.exports = (I={}, self=Model(I)) ->
     self.addWindow params
 
   self.registerHandler "txt", (file) ->
-    console.log file
-    # Launch text editor
-    # Initialize with value
-    ;
+    openWidget
+      url: "http://distri.github.io/text/"
+      value: file.content()
+      title: file.name()
+      save: true
 
   self.registerHandler "js", (file) ->
     self.exec(file.content())

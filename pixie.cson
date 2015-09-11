@@ -1,2 +1,3 @@
 dependencies:
   cornerstone: "distri/cornerstone:master"
+  "s3-uploader": "distri/s3-uploader:v0.1.3"
