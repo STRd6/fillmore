@@ -60,11 +60,22 @@ module.exports = (I={}, self=Model(I)) ->
     dragstart: (e) ->
       system.dragFolder = basePath + path + "/"
       e.dataTransfer.setData("application/whimsy-folder", basePath + path)
+    drop: folderDrop(basePath + path)
 
   fileDrag = (file) ->
     (e) ->
       system.drag = file
       e.dataTransfer.setData("application/whimsy-file", JSON.stringify(file.I))
+
+  folderDrop = (path) ->
+    (e) ->
+      if folderPath = system.dragFolder
+        system.dragFolder = null
+        [..., name, unused] = folderPath.split('/')
+        self.filesystem().moveFolder(folderPath, path + "/" + name + "/")
+      if file = system.drag
+        system.drag = null
+        file.path path + "/" + file.name()
 
   presentFile = (file) ->
     if presenter = filePresenters[file.extension()]
@@ -86,14 +97,7 @@ module.exports = (I={}, self=Model(I)) ->
       content: Folder
         system: self
         path: path + "/"
-      drop: (e) ->
-        if folderPath = system.dragFolder
-          system.dragFolder = null
-          [..., name, unused] = folderPath.split('/')
-          self.filesystem().moveFolder(folderPath, path + "/" + name + "/")
-        if file = system.drag
-          system.drag = null
-          file.path path + "/" + file.name()
+      drop: folderDrop(path)
 
   openWidget = (params) ->
     app = Application(params)

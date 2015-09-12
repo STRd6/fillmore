@@ -16,9 +16,9 @@ module.exports = (I={}, self=Model(I)) ->
     drop: (e) ->
       e.preventDefault()
 
-      if system.drag
+      if file = system.drag
         system.drag = null
-        sendData system.drag.content()
+        sendData file.content()
 
   iframe = document.createElement 'iframe'
 
