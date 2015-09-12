@@ -49,7 +49,6 @@ module.exports = (I, self) ->
     activeDrag = null
 
   cancel = (e) ->
-    console.log "CANCEL", e
     e.preventDefault()
     return false
 
@@ -59,5 +58,5 @@ module.exports = (I, self) ->
     console.log e.dataTransfer.getData("application/whimsy-folder")
     console.log e.dataTransfer.files
 
-  # document.documentElement.addEventListener "dragover", cancel
-  # document.documentElement.addEventListener "dragenter", cancel
+  document.documentElement.addEventListener "dragover", cancel
+  document.documentElement.addEventListener "dragenter", cancel
