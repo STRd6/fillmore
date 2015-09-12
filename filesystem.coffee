@@ -68,15 +68,37 @@ module.exports = Filesystem = (I={}, self=Model(I)) ->
         height: 520
         title: "Dungeon of Sadness"
     }, {
+      path: "Games/Ludum Dare/hotdog.launch"
+      content: JSON.stringify
+        title: "Bionic Hotdog"
+        icon: "http://t0.pixiecdn.com/18894/data/db894dd6682f2a08985ed5ec3400c8a25418fba4"
+        url: "http://danielx.net/grappl3r"
+        width: 1024
+        height: 576
+    }, {
       path: "System/Boot/handlers.js"
       content: """
-        
+        alert('test');
       """
     }]
 
   self.attrModels "files", File
 
   self.extend
+    find: (path) ->
+      [file] = self.files().filter (file) ->
+        file.path() is path
+
+      return file
+
+    writeFile: (path, content) ->
+      if file = self.find(path)
+        file.content content
+      else
+        self.files.push File
+          path: path
+          content: content
+
     filesIn: (directory) ->
       self.files().filter (file) ->
         path = file.path()

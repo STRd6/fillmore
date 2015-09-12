@@ -1,26 +1,25 @@
 require "cornerstone"
 Folder = require "./templates/folder"
-Widget = require "./templates/widget"
 
+Application = require "./application"
 Filesystem = require "./filesystem"
 
 module.exports = (I={}, self=Model(I)) ->
+  self.attrModel "filesystem", Filesystem
+
   self.extend
     # Execute JavaScript code in a fresh context
     # with `system` available
     exec: (code) ->
       Function("system", code)(self)
 
-    filesystem: ->
-      filesystem
-
     registerHandler: (extension, fn) ->
       handlers[extension] = fn
 
     filePresentersIn: (path) ->
-      filesystem.foldersIn(path).map (folderName) ->
+      self.filesystem().foldersIn(path).map (folderName) ->
         presentFolder folderName, path
-      .concat filesystem.filesIn(path).map presentFile
+      .concat self.filesystem().filesIn(path).map presentFile
 
   self.include require("./window-ui")
   self.include require("./persistence")
@@ -62,8 +61,6 @@ module.exports = (I={}, self=Model(I)) ->
       fn: ->
         open file
 
-  filesystem = Filesystem()
-
   openFolder = (path) ->
     self.addWindow
       title: path.split('/').last()
@@ -71,43 +68,12 @@ module.exports = (I={}, self=Model(I)) ->
         system: self
         path: path + "/"
 
-  sendData = (contentWindow, data) ->
-    contentWindow.postMessage
-      method: "value"
-      params: [data]
-    , "*"
-
   openWidget = (params) ->
-    content = Widget
-      url: params.url
+    app = Application(params)
 
-    textValue = ""
-    initialValue = params.value
+    self.addWindow app.viewData()
 
-    if params.save
-      window.addEventListener "message", (e) ->
-        if e.source is content.contentWindow
-          if e.data.status is "ready"
-            sendData content.contentWindow, initialValue
-
-          value = e.data.value
-          if value
-            textValue = value
-
-      # Add a save dealy
-      params.saveStyle =
-        "background-image: url(data:image/gif;base64,R0lGODlhEAAQAOZ3AP///9z//994/wBiycjI/+3y9PXy8/v7+8jH//X49wCQ+wAijgBfygBgyQBkyj60/wBiyjGv/wAqk9bZ+gCO+QBlzOvx88bG/6rW/wAplABfx7ft/wBky8XF/wBlywAvlgBmzRKh//T39/P//+l5/wBjyfr7+vTx8gKd/wFFqgBMsgBgyAAslNbQ/7De/wt83gB13uDe/AB15ABjyv72/wBnzwBlzwB75ySq/zyz/23M/+fm+QBq0wCB6eTj/wAqlB111ACS+ka5/wBhyR+B2tvf9wBozu7w+gBmzAAhjKrX/wAulAAulQBm0QBn0wCJ8QBizefp/ACK9gAfiwAaiwRGqT+2/87P/QCN+fHp/zOv/xSm/+fg/wCJ8AAhje7u9wBkzP7++AArlAAljwAYiABy26zX/9HS/QCU/wBSvQFJreLd/xKg/wB04ODa/wB649vW/4G59DO0/wBt2AAZiAec/xKi/////wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACH5BAEAAHcALAAAAAAQABAAAAfVgBUaJAKFhockGhUQGyMBj5CRIxsQIHQAJgeam5omAGQgM3IAHQimp6YdADoQAxEAIgmys7IiAEJDrgAXBL2+vRcAOAO6FgXHyMcWACglA1oAJwbT1NMnAGjOOXVSFArf4BRYQEEOAw9sXWlJC+0LXhwrcU/mDyE3APn6AAwNZj31QrQBQEXGGgJXYvTD8MYDByt25gAYA6PFmQk7FpbxkILIliY0pjiBM6HIl35KeCC5U+WFjSxuuPiIciQMFDAuahi5c0cNEzESgmbI8OPDBxZLVAQCADs=)"
-      params.save = ->
-        name = prompt "File name", "untitled.txt"
-
-        if name
-          self.filesystem().files.push Filesystem.File
-            path: name
-            content: textValue
-
-    params.content = content
-
-    self.addWindow params
+  self.filesystem().writeFile("System/system.pkg", JSON.stringify(PACKAGE))
 
   self.registerHandler "txt", (file) ->
     openWidget
@@ -115,6 +81,13 @@ module.exports = (I={}, self=Model(I)) ->
       value: file.content()
       title: file.name()
       save: true
+
+  self.registerHandler "pkg", (file) ->
+    console.log file.content()
+    openWidget
+      url: "http://danielx.net/editor"
+      value: file.content()
+      title: file.name()
 
   self.registerHandler "js", (file) ->
     self.exec(file.content())
