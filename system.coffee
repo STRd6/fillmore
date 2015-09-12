@@ -23,6 +23,9 @@ module.exports = (I={}, self=Model(I)) ->
 
     # Drop on desktop
     drop: (e) ->
+      if folderPath = system.dragFolder
+        [..., name, unused] = folderPath.split('/')
+        self.filesystem().moveFolder(folderPath, name + "/")
       if file = system.drag
         file.path file.name()
 
@@ -55,6 +58,7 @@ module.exports = (I={}, self=Model(I)) ->
     fn: ->
       openFolder(basePath + path)
     dragstart: (e) ->
+      system.dragFolder = basePath + path + "/"
       e.dataTransfer.setData("application/whimsy-folder", basePath + path)
 
   fileDrag = (file) ->
@@ -83,6 +87,10 @@ module.exports = (I={}, self=Model(I)) ->
         system: self
         path: path + "/"
       drop: (e) ->
+        if folderPath = system.dragFolder
+          system.dragFolder = null
+          [..., name, unused] = folderPath.split('/')
+          self.filesystem().moveFolder(folderPath, path + "/" + name + "/")
         if file = system.drag
           system.drag = null
           file.path path + "/" + file.name()

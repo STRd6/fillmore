@@ -104,6 +104,14 @@ module.exports = Filesystem = (I={}, self=Model(I)) ->
           path: path
           content: content
 
+    # Ex: moveFolder "Games/", "Cool Stuff/Games/"
+    moveFolder: (from, to) ->
+      self.files().forEach (file) ->
+        path = file.path()
+
+        if path.startsWith from
+          file.path to + path.slice(from.length) 
+
     filesIn: (directory) ->
       self.files().filter (file) ->
         path = file.path()
