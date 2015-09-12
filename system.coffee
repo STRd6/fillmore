@@ -79,6 +79,8 @@ module.exports = (I={}, self=Model(I)) ->
         system: self
         path: path + "/"
       drop: (e) ->
+        if file = system.drag
+          file.path path + "/" + file.name()
         console.log "FOLDER", e
 
   openWidget = (params) ->
