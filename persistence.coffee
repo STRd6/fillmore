@@ -14,15 +14,18 @@ module.exports = (I, self) ->
           refreshPolicy(token)
 
     saveDataBlob: (blob) ->
-      uploader = Uploader(self.uploadPolicy())
-
       blobTypedArray(blob)
       .then (arrayBuffer) ->
-
         path = urlSafeBase64EncodedSHA256(arrayBuffer)
 
+        saveBlob "data/#{path}", blob, 31536000
+
+    saveBlob: (path, blob, cacheControl=0) ->
+      self.uploadPolicy()
+      .then (policy) ->
+        uploader = Uploader(policy)
         uploader.upload
-          key: "data/#{path}"
+          key: path
           blob: blob
           cacheControl: cacheControl
 
