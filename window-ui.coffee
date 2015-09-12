@@ -47,3 +47,17 @@ module.exports = (I, self) ->
   document.addEventListener "mouseup", (e) ->
     document.getElementsByClassName("drag-fix")[0].style.zIndex = -1
     activeDrag = null
+
+  cancel = (e) ->
+    console.log "CANCEL", e
+    e.preventDefault()
+    return false
+
+  document.documentElement.addEventListener "drop", (e) ->
+    console.log e
+    console.log e.dataTransfer.getData("application/whimsy-file")
+    console.log e.dataTransfer.getData("application/whimsy-folder")
+    console.log e.dataTransfer.files
+
+  # document.documentElement.addEventListener "dragover", cancel
+  # document.documentElement.addEventListener "dragenter", cancel

@@ -22,6 +22,9 @@ File = (I={}, self=Model(I)) ->
 module.exports = Filesystem = (I={}, self=Model(I)) ->
   defaults I,
     files: [{
+      path: "duder.txt"
+      content: "Hello"
+    }, {
       path: "pixel.launch"
       content: JSON.stringify
         title: "Paint"

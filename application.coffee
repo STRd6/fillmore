@@ -1,14 +1,17 @@
 require "cornerstone"
 
 module.exports = (I={}, self=Model(I)) ->
+  self.attrObservable "title"
+
   self.extend
-    save: ->
-      ;# TODO: Display OS Save Prompt
-    load: ->
-      ;
-    viewData: ->
-      title: I.title
-      content: iframe
+    save: (data) ->
+      filename = prompt "Filename"
+
+      if filename
+        system.filesystem().writeFile(filename, data)
+
+    content: ->
+      iframe
 
   iframe = document.createElement 'iframe'
 
@@ -24,6 +27,7 @@ module.exports = (I={}, self=Model(I)) ->
         sendData iframe.contentWindow, I.data
 
       if data.method
+        id = data.id
         Q(self[data.method]?(data.params...))
         .then ->
           ; #TODO: Reply with result, using id token

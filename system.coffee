@@ -49,17 +49,27 @@ module.exports = (I={}, self=Model(I)) ->
     icon: "http://findicons.com/files/icons/2256/hamburg/32/folder.png"
     fn: ->
       openFolder(basePath + path)
+    dragstart: (e) ->
+      e.dataTransfer.files =
+      e.dataTransfer.setData("application/whimsy-folder", basePath + path)
 
   presentFile = (file) ->
     if presenter = filePresenters[file.extension()]
       extend presenter(file),
         fn: ->
           open file
+        dragstart: (e) ->
+          console.log e
+          e.dataTransfer.setData("application/whimsy-file", JSON.stringify(file.I))
+
     else
       title: file.path().split('/').last()
       icon: "http://files.softicons.com/download/toolbar-icons/iconza-grey-icons-by-turbomilk/png/32x32/document.png"
       fn: ->
         open file
+      dragstart: (e) ->
+        console.log e
+        e.dataTransfer.setData("application/whimsy-file", JSON.stringify(file.I))
 
   openFolder = (path) ->
     self.addWindow
@@ -71,14 +81,14 @@ module.exports = (I={}, self=Model(I)) ->
   openWidget = (params) ->
     app = Application(params)
 
-    self.addWindow app.viewData()
+    self.addWindow app
 
   self.filesystem().writeFile("System/system.pkg", JSON.stringify(PACKAGE))
 
   self.registerHandler "txt", (file) ->
     openWidget
-      url: "http://distri.github.io/text/"
-      value: file.content()
+      url: "http://distri.github.io/text/whimsy"
+      data: file.content()
       title: file.name()
       save: true
 
