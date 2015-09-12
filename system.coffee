@@ -23,6 +23,7 @@ module.exports = (I={}, self=Model(I)) ->
       .concat filesystem.filesIn(path).map presentFile
 
   self.include require("./window-ui")
+  self.include require("./persistence")
 
   handlers =
     folder: (file) ->

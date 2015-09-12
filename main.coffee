@@ -44,13 +44,3 @@ document.head.appendChild style
 global.system = require("./system")()
 
 document.body.appendChild require("./templates/main")(system)
-
-{SHA256} = CryptoJS = require "./lib/crypto"
-
-urlsafebase64 = require "./lib/urlsafebase64"
-
-arrayBuffer = new ArrayBuffer(32)
-hash = SHA256(CryptoJS.lib.WordArray.create(arrayBuffer))
-base64 = hash.toString(CryptoJS.enc.Base64)
-urlSafeBase64 = base64.replace(/\+/g, '-').replace(/\//g, '_').replace(/\=/g, "")
-console.log urlSafeBase64
