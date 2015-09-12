@@ -21,6 +21,11 @@ module.exports = (I={}, self=Model(I)) ->
         presentFolder folderName, path
       .concat self.filesystem().filesIn(path).map presentFile
 
+    # Drop on desktop
+    drop: (e) ->
+      if file = system.drag
+        file.path file.name()
+
   self.include require("./window-ui")
   self.include require("./persistence")
 
@@ -56,7 +61,6 @@ module.exports = (I={}, self=Model(I)) ->
     (e) ->
       system.drag = file
       e.dataTransfer.setData("application/whimsy-file", JSON.stringify(file.I))
-      console.log e
 
   presentFile = (file) ->
     if presenter = filePresenters[file.extension()]
@@ -80,8 +84,8 @@ module.exports = (I={}, self=Model(I)) ->
         path: path + "/"
       drop: (e) ->
         if file = system.drag
+          system.drag = null
           file.path path + "/" + file.name()
-        console.log "FOLDER", e
 
   openWidget = (params) ->
     app = Application(params)

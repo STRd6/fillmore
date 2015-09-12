@@ -1,5 +1,5 @@
 - Folder = require "./folder"
 
-desktop
+desktop(@drop)
   = Folder system: this, path: ""
   .drag-fix

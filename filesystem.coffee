@@ -83,6 +83,8 @@ module.exports = Filesystem = (I={}, self=Model(I)) ->
       content: """
         alert('test');
       """
+    }, {
+      path: "Test/"
     }]
 
   self.attrModels "files", File
@@ -109,7 +111,7 @@ module.exports = Filesystem = (I={}, self=Model(I)) ->
         if path.startsWith(directory)
           rest = path.replace(directory, '')
 
-          rest.indexOf('/') is -1
+          rest and (rest.indexOf('/') is -1)
 
     foldersIn: (directory) ->
       dirHash = self.files().map (file) ->
