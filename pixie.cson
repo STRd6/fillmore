@@ -1,3 +1,6 @@
+remoteDependencies: [
+  "https://code.jquery.com/jquery-2.1.4.min.js"
+]
 dependencies:
   cornerstone: "distri/cornerstone:master"
   "s3-uploader": "distri/s3-uploader:v0.1.3"

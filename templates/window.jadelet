@@ -5,3 +5,4 @@ window(style="z-index: #{@zIndex}; width: #{@width}; height: #{@height}; top: 20
     = @title
     span.close(click=close) X
   = @content
+  .drop-fix(@drop)

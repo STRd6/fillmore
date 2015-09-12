@@ -50,26 +50,27 @@ module.exports = (I={}, self=Model(I)) ->
     fn: ->
       openFolder(basePath + path)
     dragstart: (e) ->
-      e.dataTransfer.files =
       e.dataTransfer.setData("application/whimsy-folder", basePath + path)
+
+  fileDrag = (file) ->
+    (e) ->
+      system.drag = file
+      e.dataTransfer.setData("application/whimsy-file", JSON.stringify(file.I))
+      console.log e
 
   presentFile = (file) ->
     if presenter = filePresenters[file.extension()]
       extend presenter(file),
         fn: ->
           open file
-        dragstart: (e) ->
-          console.log e
-          e.dataTransfer.setData("application/whimsy-file", JSON.stringify(file.I))
+        dragstart: fileDrag(file)
 
     else
       title: file.path().split('/').last()
       icon: "http://files.softicons.com/download/toolbar-icons/iconza-grey-icons-by-turbomilk/png/32x32/document.png"
       fn: ->
         open file
-      dragstart: (e) ->
-        console.log e
-        e.dataTransfer.setData("application/whimsy-file", JSON.stringify(file.I))
+      dragstart: fileDrag(file)
 
   openFolder = (path) ->
     self.addWindow
@@ -77,6 +78,8 @@ module.exports = (I={}, self=Model(I)) ->
       content: Folder
         system: self
         path: path + "/"
+      drop: (e) ->
+        console.log "FOLDER", e
 
   openWidget = (params) ->
     app = Application(params)

@@ -13,10 +13,16 @@ module.exports = (I={}, self=Model(I)) ->
     content: ->
       iframe
 
+    drop: (e) ->
+      e.preventDefault()
+
+      if system.drag
+        sendData system.drag.content()
+
   iframe = document.createElement 'iframe'
 
-  sendData = (contentWindow, data) ->
-    contentWindow.postMessage
+  sendData = (data) ->
+    iframe.contentWindow.postMessage
       method: "load"
       params: [data]
     , "*"
@@ -24,7 +30,7 @@ module.exports = (I={}, self=Model(I)) ->
   window.addEventListener "message", ({data, source}) ->
     if source is iframe.contentWindow
       if (data.status is "ready") and I.data
-        sendData iframe.contentWindow, I.data
+        sendData I.data
 
       if data.method
         id = data.id

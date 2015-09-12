@@ -52,11 +52,12 @@ module.exports = (I, self) ->
     e.preventDefault()
     return false
 
-  document.documentElement.addEventListener "drop", (e) ->
-    console.log e
-    console.log e.dataTransfer.getData("application/whimsy-file")
-    console.log e.dataTransfer.getData("application/whimsy-folder")
-    console.log e.dataTransfer.files
+  document.addEventListener "dragstart", (e) ->
+    $('window').addClass "drop-hover"
 
-  document.documentElement.addEventListener "dragover", cancel
-  document.documentElement.addEventListener "dragenter", cancel
+  document.addEventListener "drop", (e) ->
+    $('window').removeClass "drop-hover"
+    system.drag = null
+
+  document.addEventListener "dragover", cancel
+  document.addEventListener "dragenter", cancel
