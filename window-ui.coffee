@@ -53,11 +53,16 @@ module.exports = (I, self) ->
     return false
 
   document.addEventListener "dragstart", (e) ->
-    $('window').addClass "drop-hover"
+    setTimeout ->
+      $('window').addClass "drop-hover"
 
   document.addEventListener "drop", (e) ->
     $('window').removeClass "drop-hover"
     system.drag = null
+
+  document.addEventListener "mouseup", (e) ->
+    setTimeout ->
+      $('window').removeClass "drop-hover"
 
   document.addEventListener "dragover", cancel
   document.addEventListener "dragenter", cancel
