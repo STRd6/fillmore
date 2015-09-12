@@ -1,10 +1,10 @@
 CACHE MANIFEST
-# 1442087597057
+# 1442095872371
 
 CACHE:
 index.html
 ../save.json.js
-
+https://code.jquery.com/jquery-2.1.4.min.js
 
 NETWORK:
 https://*
