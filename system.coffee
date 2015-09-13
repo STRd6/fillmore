@@ -11,6 +11,11 @@ module.exports = (I={}, self=Model(I)) ->
   self.attrModel "filesystem", Filesystem
 
   self.extend
+    # Expose PACKAGE and require so scripts can really dig in!
+    PACKAGE: PACKAGE
+    Require: require "require"
+    require: require
+
     # Execute JavaScript code in a fresh context
     # with `system` available
     exec: (code) ->

@@ -19,8 +19,6 @@ module.exports = (I, self) ->
         path = "data/#{urlSafeBase64EncodedSHA256(arrayBuffer)}"
 
         self.saveBlob path, blob, 31536000
-        .then ->
-          path
 
     saveBlob: (path, blob, cacheControl=0) ->
       self.uploadPolicy()
@@ -40,9 +38,8 @@ module.exports = (I, self) ->
 
     saveIndexHtml: ->
       self.saveFilesystem()
-      .then (fsPath) ->
+      .then (fsURL) ->
         user = "danielx"
-        fsURL = "http://whimsy.space/#{user}/#{fsPath}"
         blob = new Blob [indexPage(PACKAGE.remoteDependencies, fsURL)], type: "text/html"
   
         self.saveBlob "index.html", blob
