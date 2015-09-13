@@ -11,13 +11,13 @@ module.exports = (I, self) ->
   self.extend
     addWindow: (params) ->
       params.zIndex ?= topIndex
-  
+
       if typeof params.width is "number"
         params.width = params.width + "px"
-  
+
       if typeof params.height is "number"
         params.height = params.height + "px"
-  
+
       document.getElementsByTagName("desktop")[0].appendChild Window params
 
   activeDrag = null

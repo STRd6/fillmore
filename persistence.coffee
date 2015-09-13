@@ -16,9 +16,11 @@ module.exports = (I, self) ->
     saveDataBlob: (blob) ->
       blobTypedArray(blob)
       .then (arrayBuffer) ->
-        path = urlSafeBase64EncodedSHA256(arrayBuffer)
+        path = "data/#{urlSafeBase64EncodedSHA256(arrayBuffer)}"
 
-        saveBlob "data/#{path}", blob, 31536000
+        saveBlob path, blob, 31536000
+        .then ->
+          path
 
     saveBlob: (path, blob, cacheControl=0) ->
       self.uploadPolicy()
@@ -28,6 +30,11 @@ module.exports = (I, self) ->
           key: path
           blob: blob
           cacheControl: cacheControl
+
+    saveIndexHtml: ->
+      blob = new Blob ["Hello"], type: "text/html"
+
+      self.saveBlob "index.html", blob
 
 urlSafeBase64EncodedSHA256 = (arrayBuffer) ->
   hash = SHA256(CryptoJS.lib.WordArray.create(arrayBuffer))
@@ -51,9 +58,9 @@ getToken = ->
       token
     else
       localStorage.WHIMSY_TOKEN = token = prompt "Your ticket to Whimsy:"
-    
+
     console.log token
-    
+
     token
 
 getLocalPolicy = ->
