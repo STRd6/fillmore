@@ -37,10 +37,11 @@
 # Click leet.js
 # JS Executes!
 
+# TODO: Move this inside
 style = document.createElement "style"
 style.innerHTML = require "./style"
 document.head.appendChild style
 
-global.system = require("./system")()
+global.system = module.exports = require("./system")()
 
 document.body.appendChild require("./templates/main")(system)

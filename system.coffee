@@ -5,6 +5,9 @@ Application = require "./application"
 Filesystem = require "./filesystem"
 
 module.exports = (I={}, self=Model(I)) ->
+  defaults I,
+    filesystem: {}
+
   self.attrModel "filesystem", Filesystem
 
   self.extend
@@ -28,6 +31,10 @@ module.exports = (I={}, self=Model(I)) ->
         self.filesystem().moveFolder(folderPath, name + "/")
       if file = system.drag
         file.path file.name()
+
+    boot: (filesystem) ->
+      self.filesystem Filesystem filesystem
+      # TODO: Run init scripts
 
   self.include require("./window-ui")
   self.include require("./persistence")

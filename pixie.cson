@@ -3,4 +3,5 @@ remoteDependencies: [
 ]
 dependencies:
   cornerstone: "distri/cornerstone:master"
+  require: "distri/require:v0.5.1"
   "s3-uploader": "distri/s3-uploader:v0.1.3"
