@@ -79,9 +79,9 @@ module.exports = Filesystem = (I={}, self=Model(I)) ->
         width: 1024
         height: 576
     }, {
-      path: "System/Boot/handlers.js"
+      path: "System/Boot/info.js"
       content: """
-        alert('test');
+        console.log('INFO RAN AT BOOT');
       """
     }, {
       path: "Test/"
@@ -110,7 +110,7 @@ module.exports = Filesystem = (I={}, self=Model(I)) ->
         path = file.path()
 
         if path.startsWith from
-          file.path to + path.slice(from.length) 
+          file.path to + path.slice(from.length)
 
     filesIn: (directory) ->
       self.files().filter (file) ->

@@ -14,7 +14,12 @@ module.exports = (I={}, self=Model(I)) ->
     # Execute JavaScript code in a fresh context
     # with `system` available
     exec: (code) ->
-      Function("system", code)(self)
+      try
+        return Function("system", code)(self)
+      catch e
+        console.error e
+
+      return
 
     registerHandler: (extension, fn) ->
       handlers[extension] = fn
@@ -34,7 +39,11 @@ module.exports = (I={}, self=Model(I)) ->
 
     boot: (filesystem) ->
       self.filesystem Filesystem filesystem
-      # TODO: Run init scripts
+
+      # Run init scripts
+      self.filesystem().filesIn("System/Boot/").forEach (file) ->
+        if file.path().endsWith(".js")
+          self.exec(file.content())
 
   self.include require("./window-ui")
   self.include require("./persistence")
