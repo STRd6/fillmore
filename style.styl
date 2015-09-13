@@ -16,14 +16,22 @@ window
   resize: both
   padding: 3px
   border: 1px solid gray
+  min-width: 100px
+  min-height: 100px
 
   & > h2
     background-color: blue
     color: white
     margin: 0
     border-bottom: 1px solid gray
-    
-    & > .close
+
+    & > .save
+      width: 16px
+      height: 16px
+      margin: 5px
+
+    & > .close, .save
+      cursor: pointer
       float: right
 
   & > iframe
@@ -31,11 +39,23 @@ window
     width: 100%
     flex: 2
 
+  & > .drop-fix
+    width: 100%
+    height: 100%
+    z-index: -1
+    top: 0
+    left: 0
+    position: absolute
+
+  &.drop-hover > .drop-fix
+    z-index: 1
+
 folder
   display: block
   width: 100%
   height: 100%
   overflow: auto
+  z-index: 3
 
   & > .launcher
     cursor: pointer

@@ -41,6 +41,6 @@ style = document.createElement "style"
 style.innerHTML = require "./style"
 document.head.appendChild style
 
-global.application = require("./application")()
+global.system = require("./system")()
 
-document.body.appendChild require("./templates/main")(application)
+document.body.appendChild require("./templates/main")(system)
