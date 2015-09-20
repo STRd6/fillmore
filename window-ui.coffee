@@ -9,14 +9,9 @@ module.exports = (I, self) ->
     appWindow.style.zIndex = topIndex
 
   self.extend
-    addWindow: (params) ->
+    addWindow: (app) ->
+      params = app.viewParams()
       params.zIndex ?= topIndex
-
-      if typeof params.width is "number"
-        params.width = params.width + "px"
-
-      if typeof params.height is "number"
-        params.height = params.height + "px"
 
       document.getElementsByTagName("desktop")[0].appendChild Window params
 

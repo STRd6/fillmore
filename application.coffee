@@ -1,17 +1,24 @@
 require "cornerstone"
 
 module.exports = (I={}, self=Model(I)) ->
-  self.attrObservable "title"
+  activeFilename = null
+
+  self.attrObservable "width", "height"
 
   self.extend
     save: (data) ->
-      filename = prompt "Filename"
+      unless activeFilename
+        activeFilename = prompt "Filename"
 
-      if filename
-        system.filesystem().writeFile(filename, data)
+        self.title "#{I.title} - #{activeFilename}"
+
+      if activeFilename
+        system.filesystem().writeFile(activeFilename, data)
 
     content: ->
       iframe
+
+    title: Observable I.title
 
     drop: (e) ->
       e.preventDefault()
@@ -19,6 +26,15 @@ module.exports = (I={}, self=Model(I)) ->
       if file = system.drag
         system.drag = null
         sendData file.content()
+
+    viewParams: ->
+      drop: self.drop
+      width: self.width() + "px"
+      height: self.height() + "px"
+      content: self.content
+      title: self.title
+      close: (e) ->
+        e.target.parentNode.parentNode.remove()
 
   iframe = document.createElement 'iframe'
 
