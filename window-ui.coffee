@@ -58,3 +58,8 @@ module.exports = (I, self) ->
 
   document.addEventListener "dragover", cancel
   document.addEventListener "dragenter", cancel
+
+  dropper = require "./lib/drop"
+  dropper document, (e) ->
+    file = e.dataTransfer.files[0]
+    self.handleFileDrop(file)

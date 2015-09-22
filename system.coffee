@@ -26,6 +26,9 @@ module.exports = (I={}, self=Model(I)) ->
 
       return
 
+    handleFileDrop: (file) ->
+      console.log file
+
     registerHandler: (extension, fn) ->
       handlers[extension] = fn
 
