@@ -119,6 +119,8 @@ module.exports = (I={}, self=Model(I)) ->
         system: self
         path: path + "/"
       drop: folderDrop(path)
+      width: ->
+      height: ->
 
   openWidget = (params) ->
     app = Application(params)
