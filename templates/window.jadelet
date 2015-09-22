@@ -1,4 +1,4 @@
-window(style="z-index: #{@zIndex}; width: #{@width}; height: #{@height}; top: 20px; left: 20px" @drop)
+window(style="z-index: #{@zIndex}; width: #{@width()}px; height: #{@height()}px; top: 20px; left: 20px" @drop)
   h2.handle
     = @title
     span.close(click=@close) X

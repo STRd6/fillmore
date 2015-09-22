@@ -10,10 +10,7 @@ module.exports = (I, self) ->
 
   self.extend
     addWindow: (app) ->
-      params = app.viewParams()
-      params.zIndex ?= topIndex
-
-      document.getElementsByTagName("desktop")[0].appendChild Window params
+      document.getElementsByTagName("desktop")[0].appendChild Window app
 
   activeDrag = null
   initialPosition = null

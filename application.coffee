@@ -17,6 +17,9 @@ module.exports = (I={}, self=Model(I)) ->
 
     content: ->
       iframe
+    
+    close: (e) ->
+      e.target.parentNode.parentNode.remove()
 
     title: Observable I.title
 
@@ -26,15 +29,6 @@ module.exports = (I={}, self=Model(I)) ->
       if file = system.drag
         system.drag = null
         sendData file.content()
-
-    viewParams: ->
-      drop: self.drop
-      width: self.width() + "px"
-      height: self.height() + "px"
-      content: self.content
-      title: self.title
-      close: (e) ->
-        e.target.parentNode.parentNode.remove()
 
   iframe = document.createElement 'iframe'
 

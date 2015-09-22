@@ -121,6 +121,8 @@ module.exports = (I={}, self=Model(I)) ->
       drop: folderDrop(path)
       width: ->
       height: ->
+      close: (e) ->
+        e.target.parentNode.parentNode.remove()
 
   openWidget = (params) ->
     app = Application(params)
