@@ -155,8 +155,8 @@ module.exports = (I={}, self=Model(I)) ->
 
   self.registerHandler "js", (file) ->
     self.exec(file.content())
-  
-  self.registerHandler "jpg", (file) ->
+
+  imageViewer = (file) ->
     img = document.createElement "img"
     img.src = file.url()
 
@@ -167,5 +167,9 @@ module.exports = (I={}, self=Model(I)) ->
       title: file.path
       close: (e) ->
         e.target.parentNode.parentNode.remove()
+
+  self.registerHandler "jpg", imageViewer
+  self.registerHandler "png", imageViewer
+  self.registerHandler "gif", imageViewer
 
   return self
