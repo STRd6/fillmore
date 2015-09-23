@@ -33,6 +33,7 @@ module.exports = (I={}, self=Model(I)) ->
         self.filesystem().files.push File
           url: url
           path: file.name
+          type: file.type
 
     registerHandler: (extension, fn) ->
       handlers[extension] = fn

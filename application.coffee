@@ -17,7 +17,7 @@ module.exports = (I={}, self=Model(I)) ->
 
     content: ->
       iframe
-    
+
     close: (e) ->
       e.target.parentNode.parentNode.remove()
 
