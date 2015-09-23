@@ -9,16 +9,8 @@ module.exports = (I, self) ->
     appWindow.style.zIndex = topIndex
 
   self.extend
-    addWindow: (params) ->
-      params.zIndex ?= topIndex
-
-      if typeof params.width is "number"
-        params.width = params.width + "px"
-
-      if typeof params.height is "number"
-        params.height = params.height + "px"
-
-      document.getElementsByTagName("desktop")[0].appendChild Window params
+    addWindow: (app) ->
+      document.getElementsByTagName("desktop")[0].appendChild Window app
 
   activeDrag = null
   initialPosition = null
@@ -66,3 +58,8 @@ module.exports = (I, self) ->
 
   document.addEventListener "dragover", cancel
   document.addEventListener "dragenter", cancel
+
+  dropper = require "./lib/drop"
+  dropper document, (e) ->
+    Array::forEach.call e.dataTransfer.files, (file) ->
+      self.handleFileDrop(file)

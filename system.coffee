@@ -3,6 +3,7 @@ Folder = require "./templates/folder"
 
 Application = require "./application"
 Filesystem = require "./filesystem"
+File = require "./file"
 
 module.exports = (I={}, self=Model(I)) ->
   defaults I,
@@ -25,6 +26,14 @@ module.exports = (I={}, self=Model(I)) ->
         console.error e
 
       return
+
+    handleFileDrop: (file) ->
+      self.saveDataBlob file
+      .then (url) ->
+        self.filesystem().files.push File
+          url: url
+          path: file.name
+          type: file.type
 
     registerHandler: (extension, fn) ->
       handlers[extension] = fn
@@ -119,6 +128,10 @@ module.exports = (I={}, self=Model(I)) ->
         system: self
         path: path + "/"
       drop: folderDrop(path)
+      width: ->
+      height: ->
+      close: (e) ->
+        e.target.parentNode.parentNode.remove()
 
   openWidget = (params) ->
     app = Application(params)
@@ -143,5 +156,21 @@ module.exports = (I={}, self=Model(I)) ->
 
   self.registerHandler "js", (file) ->
     self.exec(file.content())
+
+  imageViewer = (file) ->
+    img = document.createElement "img"
+    img.src = file.url()
+
+    self.addWindow
+      width: ->
+      height: ->
+      content: img
+      title: file.path
+      close: (e) ->
+        e.target.parentNode.parentNode.remove()
+
+  self.registerHandler "jpg", imageViewer
+  self.registerHandler "png", imageViewer
+  self.registerHandler "gif", imageViewer
 
   return self

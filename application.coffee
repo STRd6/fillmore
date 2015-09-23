@@ -1,17 +1,27 @@
 require "cornerstone"
 
 module.exports = (I={}, self=Model(I)) ->
-  self.attrObservable "title"
+  activeFilename = null
+
+  self.attrObservable "width", "height"
 
   self.extend
     save: (data) ->
-      filename = prompt "Filename"
+      unless activeFilename
+        activeFilename = prompt "Filename"
 
-      if filename
-        system.filesystem().writeFile(filename, data)
+        self.title "#{I.title} - #{activeFilename}"
+
+      if activeFilename
+        system.filesystem().writeFile(activeFilename, data)
 
     content: ->
       iframe
+
+    close: (e) ->
+      e.target.parentNode.parentNode.remove()
+
+    title: Observable I.title
 
     drop: (e) ->
       e.preventDefault()
