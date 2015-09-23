@@ -69,8 +69,6 @@ getToken = ->
     else
       localStorage.WHIMSY_TOKEN = token = prompt "Your ticket to Whimsy:"
 
-    console.log token
-
     token
 
 getLocalPolicy = ->

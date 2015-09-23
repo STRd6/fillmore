@@ -1,23 +1,5 @@
 require "cornerstone"
-
-File = (I={}, self=Model(I)) ->
-  self.attrObservable "path", "content", "type"
-
-  self.extend
-    name: ->
-      self.path().split('/').last()
-
-    extension: ->
-      self.extensions().last()
-
-    extensions: ->
-      pieces = self.path().split('.')
-      pieces.shift()
-
-      pieces.map (piece, index) ->
-        pieces[index...].join(".")
-
-  return self
+File = require "./file"
 
 module.exports = Filesystem = (I={}, self=Model(I)) ->
   defaults I,

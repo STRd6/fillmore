@@ -61,5 +61,5 @@ module.exports = (I, self) ->
 
   dropper = require "./lib/drop"
   dropper document, (e) ->
-    file = e.dataTransfer.files[0]
-    self.handleFileDrop(file)
+    Array::forEach.call e.dataTransfer.files, (file) ->
+      self.handleFileDrop(file)

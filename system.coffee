@@ -3,6 +3,7 @@ Folder = require "./templates/folder"
 
 Application = require "./application"
 Filesystem = require "./filesystem"
+File = require "./file"
 
 module.exports = (I={}, self=Model(I)) ->
   defaults I,
@@ -27,7 +28,11 @@ module.exports = (I={}, self=Model(I)) ->
       return
 
     handleFileDrop: (file) ->
-      console.log file
+      self.saveDataBlob file
+      .then (url) ->
+        self.filesystem().files.push File
+          url: url
+          path: file.name
 
     registerHandler: (extension, fn) ->
       handlers[extension] = fn
@@ -150,5 +155,17 @@ module.exports = (I={}, self=Model(I)) ->
 
   self.registerHandler "js", (file) ->
     self.exec(file.content())
+  
+  self.registerHandler "jpg", (file) ->
+    img = document.createElement "img"
+    img.src = file.url()
+
+    self.addWindow
+      width: ->
+      height: ->
+      content: img
+      title: file.path
+      close: (e) ->
+        e.target.parentNode.parentNode.remove()
 
   return self
