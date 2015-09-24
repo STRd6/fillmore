@@ -1,56 +1,62 @@
 require "cornerstone"
+Postmaster = require "postmaster"
+
+Window = require "./window"
 
 module.exports = (I={}, self=Model(I)) ->
   activeFilename = null
 
-  self.attrObservable "width", "height"
+  # TODO: Handle popping-out of windows
+  # To pop in or out need to
+  # saveState
+  # switch from iframe <=> child window
+  # restoreState
+  # it is up to the app to respond to the saveState/restoreState messages correctly
+  
+  iframe = document.createElement 'iframe'
 
-  self.extend
-    save: (data) ->
-      unless activeFilename
-        activeFilename = prompt "Filename"
-
-        self.title "#{I.title} - #{activeFilename}"
-
-      if activeFilename
-        system.filesystem().writeFile(activeFilename, data)
-
+  appWindow = Window(I).extend
     content: ->
       iframe
-
-    close: (e) ->
-      e.target.parentNode.parentNode.remove()
-
-    title: Observable I.title
 
     drop: (e) ->
       e.preventDefault()
 
       if file = system.drag
         system.drag = null
-        sendData file.content()
-
-  iframe = document.createElement 'iframe'
-
-  sendData = (data) ->
-    iframe.contentWindow.postMessage
-      method: "load"
-      params: [data]
-    , "*"
-
-  window.addEventListener "message", ({data, source}) ->
-    if source is iframe.contentWindow
-      if (data.status is "ready") and I.data
-        sendData I.data
-
-      if data.method
-        id = data.id
-        Q(self[data.method]?(data.params...))
-        .then ->
-          ; #TODO: Reply with result, using id token
-        .fail ->
-          ; #TODO: Reply with error using id token
+        file.asFile()
+        .then (file) ->
+          console.log file
+          self.invokeRemote "loadFile", file
         .done()
+
+  self.extend
+    remoteTarget: -> 
+      iframe.contentWindow
+
+    childLoaded: ->
+      file = self.dataFile()
+
+      # Only do this the first time?
+      # Pop-out will cause childLoaded to be called again later...
+      if file
+        self.loadFile file
+
+    loadFile: (file) ->
+      self.invokeRemote "loadFile", file
+
+    saveFile: (file) ->
+      system.writeFile(file)
+
+    window: ->
+      appWindow
+
+  # TODO: apps should respond to `loadFile` messages
+  # when opening the app with a file as data or
+  # dropping a file from the fileSystem on to the app
+  # A file object will be passed
+
+  self.include Postmaster
 
   if I.url
     iframe.src = I.url

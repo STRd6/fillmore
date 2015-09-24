@@ -4,6 +4,7 @@ Folder = require "./templates/folder"
 Application = require "./application"
 Filesystem = require "./filesystem"
 File = require "./file"
+Window = require "./window"
 
 module.exports = (I={}, self=Model(I)) ->
   defaults I,
@@ -28,9 +29,14 @@ module.exports = (I={}, self=Model(I)) ->
       return
 
     handleFileDrop: (file) ->
+      self.writeFile(file)
+
+    # Write an HTML5 file object to our file system
+    writeFile: (file) ->
+      # TODO: Prompt for overwrite?
       self.saveDataBlob file
       .then (url) ->
-        self.filesystem().files.push File
+        self.filesystem().writeFile
           url: url
           path: file.name
           type: file.type
@@ -122,23 +128,20 @@ module.exports = (I={}, self=Model(I)) ->
       dragstart: fileDrag(file)
 
   openFolder = (path) ->
-    self.addWindow
+    window = Window
       title: path.split('/').last()
+    .extend
       content: Folder
         system: self
         path: path + "/"
       drop: folderDrop(path)
-      width: ->
-      height: ->
-      close: (e) ->
-        e.target.parentNode.parentNode.remove()
+
+    self.addWindow window
 
   openWidget = (params) ->
     app = Application(params)
 
-    self.addWindow app
-
-  self.filesystem().writeFile("System/system.pkg", JSON.stringify(PACKAGE))
+    self.addWindow app.window()
 
   self.registerHandler "txt", (file) ->
     openWidget
@@ -161,13 +164,12 @@ module.exports = (I={}, self=Model(I)) ->
     img = document.createElement "img"
     img.src = file.url()
 
-    self.addWindow
-      width: ->
-      height: ->
-      content: img
+    window = Window
       title: file.path
-      close: (e) ->
-        e.target.parentNode.parentNode.remove()
+    .extend
+      content: img
+
+    self.addWindow window
 
   self.registerHandler "jpg", imageViewer
   self.registerHandler "png", imageViewer

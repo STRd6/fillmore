@@ -31,9 +31,8 @@ module.exports = Filesystem = (I={}, self=Model(I)) ->
       path: "text.launch"
       content: JSON.stringify
         title: "notepad.exe"
-        url: "http://distri.github.io/text/",
+        url: "http://distri.github.io/text/whimsy2",
         icon: "http://files.softicons.com/download/application-icons/sleek-xp-software-icons-by-deleket/png/32/Notepad.png"
-        save: true
         width: 400
         height: 300
     }, {
@@ -78,13 +77,13 @@ module.exports = Filesystem = (I={}, self=Model(I)) ->
 
       return file
 
-    writeFile: (path, content) ->
-      if file = self.find(path)
-        file.content content
+    writeFile: (fileData) ->
+      if file = self.find(fileData.path)
+        file.content fileData.content
+        file.url fileData.url
+        file.type fileData.type
       else
-        self.files.push File
-          path: path
-          content: content
+        self.files.push File fileData
 
     # Ex: moveFolder "Games/", "Cool Stuff/Games/"
     moveFolder: (from, to) ->

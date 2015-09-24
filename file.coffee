@@ -4,6 +4,14 @@ module.exports = File = (I={}, self=Model(I)) ->
   self.attrObservable "path", "content", "type", "url"
 
   self.extend
+    asFile: ->
+      Q.fcall ->
+        if self.url() # remote file
+          ;# TODO: ajax get array buffer and return promise for file
+        else
+          new window.File [self.content()], self.path(),
+            type: self.type()
+
     name: ->
       self.path().split('/').last()
 
