@@ -7,7 +7,7 @@ module.exports = File = (I={}, self=Model(I)) ->
     asFile: ->
       Q.fcall ->
         if self.url() # remote file
-          ;# TODO: ajax get array buffer and return promise for file
+          ;# TODO: ajax get blob
         else
           new window.File [self.content()], self.path(),
             type: self.type()

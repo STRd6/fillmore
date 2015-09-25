@@ -6,6 +6,8 @@ Filesystem = require "./filesystem"
 File = require "./file"
 Window = require "./window"
 
+{readFile} = require "./util"
+
 module.exports = (I={}, self=Model(I)) ->
   defaults I,
     filesystem: {}
@@ -33,13 +35,22 @@ module.exports = (I={}, self=Model(I)) ->
 
     # Write an HTML5 file object to our file system
     writeFile: (file) ->
-      # TODO: Prompt for overwrite?
-      self.saveDataBlob file
-      .then (url) ->
-        self.filesystem().writeFile
-          url: url
-          path: file.name
-          type: file.type
+      # TODO: Handle more text types
+      if (file.type is "text/plain") and (file.size <= 4 * 1024)
+        readFile(file)
+        .then (text) ->
+          self.filesystem().writeFile
+            content: text
+            path: file.name
+            type: file.type
+      else
+        # TODO: Prompt for overwrite?
+        self.saveDataBlob file
+        .then (url) ->
+          self.filesystem().writeFile
+            url: url
+            path: file.name
+            type: file.type
 
     registerHandler: (extension, fn) ->
       handlers[extension] = fn
