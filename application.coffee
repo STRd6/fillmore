@@ -24,11 +24,7 @@ module.exports = (I={}, self=Model(I)) ->
 
       if file = system.drag
         system.drag = null
-        file.asFile()
-        .then (file) ->
-          console.log file
-          self.invokeRemote "loadFile", file
-        .done()
+        self.loadWhimsyFile(file)
 
   self.extend
     remoteTarget: -> 
@@ -40,7 +36,14 @@ module.exports = (I={}, self=Model(I)) ->
       # Only do this the first time?
       # Pop-out will cause childLoaded to be called again later...
       if file
+        self.loadWhimsyFile(file)
+
+    loadWhimsyFile: (file) ->
+      file.asFile()
+      .then (file) ->
+        console.log file
         self.loadFile file
+      .done()
 
     loadFile: (file) ->
       self.invokeRemote "loadFile", file

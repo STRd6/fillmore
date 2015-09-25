@@ -101,7 +101,13 @@ module.exports = (I={}, self=Model(I)) ->
   fileDrag = (file) ->
     (e) ->
       system.drag = file
-      e.dataTransfer.setData("application/whimsy-file", JSON.stringify(file.I))
+      e.dataTransfer.setData("application/whimsy-file+json", JSON.stringify(file.I))
+
+      file.asFile()
+      .then (file) ->
+        console.log "FILE: ", file
+        e.dataTransfer.files[0] = file
+        console.log e.dataTransfer.files[0]
 
   folderDrop = (path) ->
     (e) ->
@@ -139,14 +145,18 @@ module.exports = (I={}, self=Model(I)) ->
     self.addWindow window
 
   openWidget = (params) ->
+    if file = params.file
+      delete params.file
+
     app = Application(params)
+    app.dataFile = -> file
 
     self.addWindow app.window()
 
   self.registerHandler "txt", (file) ->
     openWidget
-      url: "http://distri.github.io/text/whimsy"
-      data: file.content()
+      url: "http://distri.github.io/text/whimsy2"
+      file: file
       title: file.name()
       save: true
 
