@@ -36,13 +36,13 @@ module.exports = (I, self) ->
 
       self.saveDataBlob blob
 
-    saveIndexHtml: ->
+    saveIndexHtml: (name="index.html") ->
       self.saveFilesystem()
       .then (fsURL) ->
         user = "danielx"
         blob = new Blob [indexPage(PACKAGE.remoteDependencies, fsURL)], type: "text/html"
 
-        self.saveBlob "index.html", blob
+        self.saveBlob name, blob
       .catch (e) ->
         console.error e
 
@@ -67,9 +67,10 @@ getToken = ->
     if token = localStorage.WHIMSY_TOKEN
       token
     else
-      localStorage.WHIMSY_TOKEN = token = prompt "Your ticket to Whimsy:"
-
-    token
+      if token = prompt "Your ticket to Whimsy:"
+        localStorage.WHIMSY_TOKEN = token
+      else
+        throw new Error("No token given")
 
 getLocalPolicy = ->
   Q.fcall ->

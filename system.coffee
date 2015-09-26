@@ -76,6 +76,12 @@ module.exports = (I={}, self=Model(I)) ->
         if file.path().endsWith(".js")
           self.exec(file.content())
 
+    open: (file) ->
+      if handler = handlers[file.extension()]
+        handler(file)
+      else
+        alert "Don't know about this kind of file"
+
   self.include require("./window-ui")
   self.include require("./persistence")
 
@@ -92,12 +98,6 @@ module.exports = (I={}, self=Model(I)) ->
 
       title: data.title
       icon: data.icon
-
-  open = (file) ->
-    if handler = handlers[file.extension()]
-      handler(file)
-    else
-      alert "Don't know about this kind of file"
 
   presentFolder = (path, basePath="") ->
     title: path.split('/').last()
@@ -134,14 +134,14 @@ module.exports = (I={}, self=Model(I)) ->
     if presenter = filePresenters[file.extension()]
       extend presenter(file),
         fn: ->
-          open file
+          self.open file
         dragstart: fileDrag(file)
 
     else
       title: file.path().split('/').last()
       icon: "http://files.softicons.com/download/toolbar-icons/iconza-grey-icons-by-turbomilk/png/32x32/document.png"
       fn: ->
-        open file
+        self.open file
       dragstart: fileDrag(file)
 
   openFolder = (path) ->
@@ -169,7 +169,6 @@ module.exports = (I={}, self=Model(I)) ->
       url: "http://distri.github.io/text/whimsy2"
       file: file
       title: file.name()
-      save: true
 
   self.registerHandler "pkg", (file) ->
     console.log file.content()
