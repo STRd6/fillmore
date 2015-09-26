@@ -21,6 +21,7 @@ module.exports = (I={}, self=Model(I)) ->
 
     drop: (e) ->
       e.preventDefault()
+      e.stopPropagation()
 
       if file = system.drag
         system.drag = null
