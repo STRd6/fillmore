@@ -48,13 +48,16 @@ module.exports = (I, self) ->
     setTimeout ->
       $('window').addClass "drop-hover"
 
-  document.addEventListener "drop", (e) ->
-    $('window').removeClass "drop-hover"
-    system.drag = null
-
+  # Note: We're doing drag cleanup in the mouseup event
+  # with a timeout
+  # This is so we can stopPropagation on drop events and
+  # still get cleanup
+  # We also don't need to worry about dragend being
+  # weird
   document.addEventListener "mouseup", (e) ->
     setTimeout ->
       $('window').removeClass "drop-hover"
+      system.drag = null
 
   document.addEventListener "dragover", cancel
   document.addEventListener "dragenter", cancel

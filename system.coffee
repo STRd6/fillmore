@@ -62,6 +62,7 @@ module.exports = (I={}, self=Model(I)) ->
 
     # Drop on desktop
     drop: (e) ->
+      console.log "desktop drop"
       if folderPath = system.dragFolder
         [..., name, unused] = folderPath.split('/')
         self.filesystem().moveFolder(folderPath, name + "/")
@@ -115,17 +116,12 @@ module.exports = (I={}, self=Model(I)) ->
 
   fileDrag = (file) ->
     (e) ->
-      system.drag = file
+      self.drag = file
       e.dataTransfer.setData("application/whimsy-file+json", JSON.stringify(file.I))
-
-      file.asFile()
-      .then (file) ->
-        console.log "FILE: ", file
-        e.dataTransfer.files[0] = file
-        console.log e.dataTransfer.files[0]
 
   folderDrop = (path) ->
     (e) ->
+      console.log "folder drop"
       if folderPath = system.dragFolder
         e.stopPropagation()
         e.preventDefault()
