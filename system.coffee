@@ -65,8 +65,12 @@ module.exports = (I={}, self=Model(I)) ->
       if folderPath = system.dragFolder
         [..., name, unused] = folderPath.split('/')
         self.filesystem().moveFolder(folderPath, name + "/")
-      if file = system.drag
+      else if file = system.drag
         file.path file.name()
+      else if fileData = e.dataTransfer.getData("application/whimsy-file+json")
+        file = File JSON.parse(fileData)
+        file.path file.name()
+        self.filesystem().files.push file
 
     boot: (filesystem) ->
       self.filesystem Filesystem filesystem
@@ -123,12 +127,20 @@ module.exports = (I={}, self=Model(I)) ->
   folderDrop = (path) ->
     (e) ->
       if folderPath = system.dragFolder
-        system.dragFolder = null
+        e.stopPropagation()
+        e.preventDefault()
         [..., name, unused] = folderPath.split('/')
         self.filesystem().moveFolder(folderPath, path + "/" + name + "/")
-      if file = system.drag
-        system.drag = null
+      else if file = system.drag
+        e.stopPropagation()
+        e.preventDefault()
         file.path path + "/" + file.name()
+      else if fileData = e.dataTransfer.getData("application/whimsy-file+json")
+        e.stopPropagation()
+        e.preventDefault()
+        file = File JSON.parse(fileData)
+        file.path path + "/" + file.name()
+        self.filesystem().files.push file
 
   presentFile = (file) ->
     if presenter = filePresenters[file.extension()]
