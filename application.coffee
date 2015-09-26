@@ -4,7 +4,7 @@ Postmaster = require "postmaster"
 Window = require "./window"
 
 module.exports = (I={}, self=Model(I)) ->
-  activeFilename = null
+  self.attrObservable "title"
 
   # TODO: Handle popping-out of windows
   # To pop in or out need to
@@ -12,7 +12,7 @@ module.exports = (I={}, self=Model(I)) ->
   # switch from iframe <=> child window
   # restoreState
   # it is up to the app to respond to the saveState/restoreState messages correctly
-  
+
   iframe = document.createElement 'iframe'
 
   appWindow = Window(I).extend
@@ -26,8 +26,10 @@ module.exports = (I={}, self=Model(I)) ->
         system.drag = null
         self.loadWhimsyFile(file)
 
+    title: self.title
+
   self.extend
-    remoteTarget: -> 
+    remoteTarget: ->
       iframe.contentWindow
 
     childLoaded: ->
