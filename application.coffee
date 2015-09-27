@@ -14,8 +14,13 @@ module.exports = (I={}, self=Model(I)) ->
   # it is up to the app to respond to the saveState/restoreState messages correctly
 
   iframe = document.createElement 'iframe'
+  savedState = null
+  externalWindow = null
 
   appWindow = Window(I).extend
+    app: ->
+      self
+
     content: ->
       iframe
 
@@ -33,12 +38,33 @@ module.exports = (I={}, self=Model(I)) ->
     remoteTarget: ->
       iframe.contentWindow
 
+    popOut: ->
+      return if externalWindow
+      externalWindow = window.open(I.url, "", "width=#{I.width},height=#{I.height}")
+
+      unless externalWindow # Pop up blocked
+        alert "Pop out was blocked"
+        return
+
+      # Get State
+      self.invokeRemote "saveState"
+      .then (state) ->
+        appWindow.close()
+        console.log state
+        savedState = state
+        self.remoteTarget = -> externalWindow
+        self.invokeRemote "restoreState", state
+      .catch (e) ->
+        
+
     childLoaded: ->
       file = self.dataFile()
 
       # Only do this the first time?
       # Pop-out will cause childLoaded to be called again later...
-      if file
+      if savedState
+        self.invokeRemote "restoreState", savedState
+      else if file
         self.loadWhimsyFile(file)
 
     loadWhimsyFile: (file) ->

@@ -31,7 +31,7 @@ module.exports = Filesystem = (I={}, self=Model(I)) ->
       path: "text.launch"
       content: JSON.stringify
         title: "notepad.exe"
-        url: "http://distri.github.io/text/whimsy2",
+        url: "http://distri.github.io/text",
         icon: "http://files.softicons.com/download/application-icons/sleek-xp-software-icons-by-deleket/png/32/Notepad.png"
         width: 400
         height: 300

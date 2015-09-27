@@ -20,6 +20,8 @@ module.exports = (I={}, self=Model(I)) ->
     Require: require "require"
     require: require
 
+    runningApplications: Observable []
+
     # Execute JavaScript code in a fresh context
     # with `system` available
     exec: (code) ->
@@ -169,6 +171,8 @@ module.exports = (I={}, self=Model(I)) ->
 
     app = Application(params)
     app.dataFile = -> file
+
+    self.runningApplications.push app
 
     self.addWindow app.window()
 

@@ -1,5 +1,3 @@
-WindowTemplate = require "./templates/window"
-
 module.exports = (I, self) ->
   topIndex = 1
 
@@ -10,7 +8,7 @@ module.exports = (I, self) ->
 
   self.extend
     addWindow: (window) ->
-      document.getElementsByTagName("desktop")[0].appendChild WindowTemplate window
+      document.getElementsByTagName("desktop")[0].appendChild window.element()
 
   activeDrag = null
   initialPosition = null
