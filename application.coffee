@@ -55,7 +55,7 @@ module.exports = (I={}, self=Model(I)) ->
         self.remoteTarget = -> externalWindow
         self.invokeRemote "restoreState", state
       .catch (e) ->
-        
+
 
     childLoaded: ->
       file = self.dataFile()
@@ -77,7 +77,10 @@ module.exports = (I={}, self=Model(I)) ->
     loadFile: (file) ->
       self.invokeRemote "loadFile", file
 
-    saveFile: (file) ->
+    saveFile: (file, path) ->
+      if path
+        file.name = path
+
       system.writeFile(file)
 
     window: ->
