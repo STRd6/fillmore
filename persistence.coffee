@@ -151,10 +151,9 @@ launcherScript = (filesystemURL) ->
   """
     <script>
       (function() {
-        var oldRequire = window.Require;
-        #{PACKAGE.dependencies.require.distribution.main.content};
-        var require = Require.require;
-        window.Require = oldRequire;
+        var src = #{JSON.stringify(PACKAGE.dependencies.require.distribution.main.content)};
+        var Require = new Function("PACKAGE", "return " + src)({distribution: {main: {content: src}}});
+        var require = Require.generateFor({});
 
         var xhr = new XMLHttpRequest();
         xhr.open('GET', #{JSON.stringify(filesystemURL)}, true);
