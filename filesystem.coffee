@@ -60,11 +60,18 @@ module.exports = Filesystem = (I={}, self=Model(I)) ->
         width: 1024
         height: 576
     }, {
-      path: "System/Boot/info.js"
+      path: "System/Boot/info.coffee"
       content: """
-        console.log('INFO RAN AT BOOT');
+        console.log('INFO RAN AT BOOT')
       """
     }, {
+      path: "netboot.coffee"
+      content: """
+        url = prompt "URL:", "https://s3.amazonaws.com/whimsyspace-databucket-1g3p6d9lcl6x1/danielx/data/hgqOBLK51ZVs4smfsBUOQbffgqlTBxg8sfI16qySgTQ"
+        if url
+          system.netBoot(url)
+      """
+    },{
       path: "Test/"
     }]
 

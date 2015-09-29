@@ -2,6 +2,8 @@ require "cornerstone"
 
 Ajax = require "./lib/ajax"
 
+{readFile} = require "./util"
+
 module.exports = File = (I={}, self=Model(I)) ->
   self.attrObservable "path", "content", "type", "url"
 
@@ -18,6 +20,15 @@ module.exports = File = (I={}, self=Model(I)) ->
         else
           new window.File [self.content()], self.path(),
             type: self.type()
+
+    asText: ->
+      Q.fcall ->
+        url = self.url()
+        if url
+          self.asFile()
+          .then readFile
+        else
+          I.content
 
     name: ->
       self.path().split('/').last()

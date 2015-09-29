@@ -24,6 +24,9 @@ module.exports = (I={}, self=Model(I)) ->
     content: ->
       iframe
 
+    poppable: -> 
+      true
+
     drop: (e) ->
       e.preventDefault()
       e.stopPropagation()

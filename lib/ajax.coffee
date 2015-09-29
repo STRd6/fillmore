@@ -4,7 +4,7 @@ module.exports = Ajax =
     .then (blob) ->
       new Promise (resolve, reject) ->
         reader = new FileReader()
-    
+
         reader.onloadend = ->
           resolve(reader.result)
         reader.onerror = reject

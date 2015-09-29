@@ -1,6 +1,7 @@
 require "cornerstone"
 Folder = require "./templates/folder"
 
+Ajax = require "./lib/ajax"
 Application = require "./application"
 Filesystem = require "./filesystem"
 File = require "./file"
@@ -31,6 +32,10 @@ module.exports = (I={}, self=Model(I)) ->
         console.error e
 
       return
+    
+    execCoffee: (source) ->
+      code = CoffeeScript.compile(source, bare: true)
+      self.exec(code)
 
     handleFileDrop: (file) ->
       self.writeFile(file)
@@ -82,6 +87,17 @@ module.exports = (I={}, self=Model(I)) ->
       self.filesystem().filesIn("System/Boot/").forEach (file) ->
         if file.path().endsWith(".js")
           self.exec(file.content())
+        else if file.path().endsWith(".coffee")
+          file.asText()
+          .then self.execCoffee
+          .done()
+
+    netBoot: (url) ->
+      Ajax.getJSON(url)
+      .then self.boot
+
+    reboot: ->
+      self.boot(self.filesystem().I)
 
     open: (file) ->
       if handler = handlers[file.extension()]
@@ -191,6 +207,10 @@ module.exports = (I={}, self=Model(I)) ->
 
   self.registerHandler "js", (file) ->
     self.exec(file.content())
+  
+  self.registerHandler "coffee", (file) ->
+    file.asText()
+    .then self.execCoffee
 
   imageViewer = (file) ->
     img = document.createElement "img"

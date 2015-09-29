@@ -1,7 +1,8 @@
-window(style="z-index: #{@zIndex}; width: #{@width()}px; height: #{@height()}px; top: 20px; left: 20px" @drop)
+window(style="z-index: #{@zIndex()}; width: #{@width()}px; height: #{@height()}px; top: 20px; left: 20px" @drop)
   h2.handle
     = @title
     .action.close(click=@close) X
-    .action.pop-out(click=@popOut) +
+    - if @poppable?()
+      .action.pop-out(click=@popOut) +
   = @content
   .drop-fix
