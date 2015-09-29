@@ -2,7 +2,7 @@ require "cornerstone"
 WindowTemplate = require "./templates/window"
 
 module.exports = (I={}, self=Model(I)) ->
-  self.attrObservable "width", "height", "zIndex"
+  self.attrObservable "width", "height"
 
   element = null
 

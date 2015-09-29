@@ -8,6 +8,7 @@ module.exports = (I, self) ->
 
   self.extend
     addWindow: (window) ->
+      raise window.element()
       document.getElementsByTagName("desktop")[0].appendChild window.element()
 
   activeDrag = null

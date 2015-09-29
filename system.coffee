@@ -32,7 +32,7 @@ module.exports = (I={}, self=Model(I)) ->
         console.error e
 
       return
-    
+
     execCoffee: (source) ->
       code = CoffeeScript.compile(source, bare: true)
       self.exec(code)
@@ -207,7 +207,7 @@ module.exports = (I={}, self=Model(I)) ->
 
   self.registerHandler "js", (file) ->
     self.exec(file.content())
-  
+
   self.registerHandler "coffee", (file) ->
     file.asText()
     .then self.execCoffee

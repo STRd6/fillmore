@@ -24,7 +24,7 @@ module.exports = (I={}, self=Model(I)) ->
     content: ->
       iframe
 
-    poppable: -> 
+    poppable: ->
       true
 
     drop: (e) ->
