@@ -4,6 +4,9 @@ Uploader = require "s3-uploader"
 
 POLICY_STORAGE_KEY = "WHIMSY_POLICY"
 
+{readFile} = require "./util"
+{getJSON} = require "./lib/ajax"
+
 module.exports = (I, self) ->
   self.extend
     uploadPolicy: ->
@@ -14,7 +17,7 @@ module.exports = (I, self) ->
           refreshPolicy(token)
 
     saveDataBlob: (blob) ->
-      blobTypedArray(blob)
+      readFile(blob, "readAsArrayBuffer")
       .then (arrayBuffer) ->
         path = "data/#{urlSafeBase64EncodedSHA256(arrayBuffer)}"
 
@@ -51,17 +54,6 @@ urlSafeBase64EncodedSHA256 = (arrayBuffer) ->
   base64 = hash.toString(CryptoJS.enc.Base64)
   urlSafeBase64 = base64.replace(/\+/g, '-').replace(/\//g, '_').replace(/\=+$/, "")
 
-blobTypedArray = (blob) ->
-  return new Promise (resolve, reject) ->
-    reader = new FileReader()
-
-    reader.onloadend = ->
-      resolve(reader.result)
-
-    reader.onerror = reject
-
-    reader.readAsArrayBuffer(blob)
-
 getToken = ->
   Q.fcall ->
     if token = localStorage.WHIMSY_TOKEN
@@ -93,34 +85,6 @@ refreshPolicy = (token) ->
     localStorage[POLICY_STORAGE_KEY] = JSON.stringify(policyJSON)
 
     policyJSON
-
-getJSON = (path, options={}) ->
-  deferred = Q.defer()
-
-  xhr = new XMLHttpRequest()
-
-  xhr.open('GET', path, true)
-
-  headers = options.headers
-  if headers
-    Object.keys(headers).forEach (header) ->
-      value = headers[header]
-      xhr.setRequestHeader header, value
-
-  xhr.onload = (e) ->
-    if (200 <= this.status < 300) or this.status is 304
-      try
-        deferred.resolve JSON.parse this.responseText
-      catch error
-        deferred.reject error
-    else
-      deferred.reject e
-
-  xhr.onprogress = deferred.notify
-  xhr.onerror = deferred.reject
-  xhr.send()
-
-  deferred.promise
 
 indexPage = (remoteDependencies, fsURL) ->
   """

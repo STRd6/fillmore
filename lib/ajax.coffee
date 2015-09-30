@@ -1,14 +1,9 @@
+{readFile} = require "../util"
+
 module.exports = Ajax =
   getJSON: (path, options={}) ->
     Ajax.getBlob(path, options)
-    .then (blob) ->
-      new Promise (resolve, reject) ->
-        reader = new FileReader()
-
-        reader.onloadend = ->
-          resolve(reader.result)
-        reader.onerror = reject
-        reader.readAsText(blob)
+    .then readFile
     .then JSON.parse
 
   getBlob: (path, options={}) ->
