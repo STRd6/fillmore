@@ -83,6 +83,17 @@ module.exports = (I={}, self=Model(I)) ->
         file.path file.name()
         self.filesystem().files.push file
 
+    run: (params) ->
+      if file = params.file
+        delete params.file
+
+      app = Application(params)
+      app.dataFile = -> file
+
+      self.runningApplications.push app
+
+      self.addWindow app.window()
+
     boot: (filesystem) ->
       self.filesystem Filesystem filesystem
 
@@ -116,7 +127,7 @@ module.exports = (I={}, self=Model(I)) ->
       openFolder JSON.parse(file.content())
 
     launch: (file) ->
-      openWidget JSON.parse(file.content())
+      self.run JSON.parse(file.content())
 
   filePresenters =
     launch: (file) ->
@@ -180,23 +191,20 @@ module.exports = (I={}, self=Model(I)) ->
       content: Folder
         system: self
         path: path + "/"
+        style: ->
+          file = self.filesystem().find("#{path}/.style")
+
+          if file
+            file.content()
+          else
+            ""
+
       drop: folderDrop(path)
 
     self.addWindow window
 
-  openWidget = (params) ->
-    if file = params.file
-      delete params.file
-
-    app = Application(params)
-    app.dataFile = -> file
-
-    self.runningApplications.push app
-
-    self.addWindow app.window()
-
   self.registerHandler "txt", (file) ->
-    openWidget
+    self.run
       url: "http://distri.github.io/text/whimsy2"
       file: file
       title: file.name()
