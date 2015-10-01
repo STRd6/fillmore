@@ -1,5 +1,4 @@
 require "cornerstone"
-Folder = require "./templates/folder"
 
 Ajax = require "./lib/ajax"
 Application = require "./application"
@@ -65,24 +64,6 @@ module.exports = (I={}, self=Model(I)) ->
     registerHandler: (extension, fn) ->
       handlers[extension] = fn
 
-    filePresentersIn: (path) ->
-      self.filesystem().foldersIn(path).map (folderName) ->
-        presentFolder folderName, path
-      .concat self.filesystem().filesIn(path).map presentFile
-
-    # Drop on desktop
-    drop: (e) ->
-      console.log "desktop drop"
-      if folderPath = system.dragFolder
-        [..., name, unused] = folderPath.split('/')
-        self.filesystem().moveFolder(folderPath, name + "/")
-      else if file = system.drag
-        file.path file.name()
-      else if fileData = e.dataTransfer.getData("application/whimsy-file+json")
-        file = File JSON.parse(fileData)
-        file.path file.name()
-        self.filesystem().files.push file
-
     run: (params) ->
       if file = params.file
         delete params.file
@@ -123,85 +104,8 @@ module.exports = (I={}, self=Model(I)) ->
   self.include require("./persistence")
 
   handlers =
-    folder: (file) ->
-      openFolder JSON.parse(file.content())
-
     launch: (file) ->
       self.run JSON.parse(file.content())
-
-  filePresenters =
-    launch: (file) ->
-      data = JSON.parse(file.content())
-
-      title: data.title
-      icon: data.icon
-
-  presentFolder = (path, basePath="") ->
-    title: path.split('/').last()
-    icon: "http://findicons.com/files/icons/2256/hamburg/32/folder.png"
-    fn: ->
-      openFolder(basePath + path)
-    dragstart: (e) ->
-      system.dragFolder = basePath + path + "/"
-      e.dataTransfer.setData("application/whimsy-folder", basePath + path)
-    drop: folderDrop(basePath + path)
-
-  fileDrag = (file) ->
-    (e) ->
-      self.drag = file
-      e.dataTransfer.setData("application/whimsy-file+json", JSON.stringify(file.I))
-
-  folderDrop = (path) ->
-    (e) ->
-      console.log "folder drop"
-      if folderPath = system.dragFolder
-        e.stopPropagation()
-        e.preventDefault()
-        [..., name, unused] = folderPath.split('/')
-        self.filesystem().moveFolder(folderPath, path + "/" + name + "/")
-      else if file = system.drag
-        e.stopPropagation()
-        e.preventDefault()
-        file.path path + "/" + file.name()
-      else if fileData = e.dataTransfer.getData("application/whimsy-file+json")
-        e.stopPropagation()
-        e.preventDefault()
-        file = File JSON.parse(fileData)
-        file.path path + "/" + file.name()
-        self.filesystem().files.push file
-
-  presentFile = (file) ->
-    if presenter = filePresenters[file.extension()]
-      extend presenter(file),
-        fn: ->
-          self.open file
-        dragstart: fileDrag(file)
-
-    else
-      title: file.path().split('/').last()
-      icon: "http://files.softicons.com/download/toolbar-icons/iconza-grey-icons-by-turbomilk/png/32x32/document.png"
-      fn: ->
-        self.open file
-      dragstart: fileDrag(file)
-
-  openFolder = (path) ->
-    window = Window
-      title: path.split('/').last()
-    .extend
-      content: Folder
-        system: self
-        path: path + "/"
-        style: ->
-          file = self.filesystem().find("#{path}/.style")
-
-          if file
-            file.content()
-          else
-            ""
-
-      drop: folderDrop(path)
-
-    self.addWindow window
 
   self.registerHandler "txt", (file) ->
     self.run
