@@ -26,12 +26,7 @@ module.exports = (I={}, self=Model(I)) ->
     # Execute JavaScript code in a fresh context
     # with `system` available
     exec: (code) ->
-      try
-        return Function("system", code)(self)
-      catch e
-        console.error e
-
-      return
+      Function("system", code)(self)
 
     execCoffee: (source) ->
       code = CoffeeScript.compile(source, bare: true)
@@ -58,6 +53,14 @@ module.exports = (I={}, self=Model(I)) ->
             url: url
             path: file.name
             type: file.type
+
+    readFile: (path) ->
+      file = self.filesystem().find(path)
+
+      if file
+        file.asFile()
+      else
+        throw new Error "File not found: #{path}"
 
     registerHandler: (extension, fn) ->
       handlers[extension] = fn
@@ -196,13 +199,6 @@ module.exports = (I={}, self=Model(I)) ->
     openWidget
       url: "http://distri.github.io/text/whimsy2"
       file: file
-      title: file.name()
-
-  self.registerHandler "pkg", (file) ->
-    console.log file.content()
-    openWidget
-      url: "http://danielx.net/editor"
-      value: file.content()
       title: file.name()
 
   self.registerHandler "js", (file) ->
