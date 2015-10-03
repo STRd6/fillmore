@@ -107,19 +107,6 @@ module.exports = (I={}, self=Model(I)) ->
     launch: (file) ->
       self.run JSON.parse(file.content())
 
-  self.registerHandler "txt", (file) ->
-    self.run
-      url: "http://distri.github.io/text/whimsy2"
-      file: file
-      title: file.name()
-
-  self.registerHandler "js", (file) ->
-    self.exec(file.content())
-
-  self.registerHandler "coffee", (file) ->
-    file.asText()
-    .then self.execCoffee
-
   imageViewer = (file) ->
     img = document.createElement "img"
     img.src = file.url()
