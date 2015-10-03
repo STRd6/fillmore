@@ -1,3 +1,23 @@
+###
+Application
+-----------
+
+An application is some running process. It may have a window. That window can
+be popped in or out of the desktop if the application implements `saveState` and
+`restoreState`.
+
+This application class provides an interface for the code to interact with the
+rest of the operating system. Using `postMessage` the application can read files,
+write files, and communicate with other applications.
+
+Applications should use `Postmaster` for easy remote procedure calling across
+windows and frames. When the application loads it should post the `childLoaded`
+message. This will allow it to restore state and to load an initial file (like
+when someone drags a file onto an app to open it). The application should
+respond to the `loadFile` message to allow this functionality.
+
+###
+
 require "cornerstone"
 Postmaster = require "postmaster"
 
@@ -89,6 +109,9 @@ module.exports = (I={}, self=Model(I)) ->
     system: (method, params...) ->
       system[method](params...)
 
+    ###
+    
+    ###
     window: ->
       appWindow
 

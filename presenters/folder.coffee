@@ -4,9 +4,9 @@ Folder = require "../templates/folder"
 module.exports = FolderPresenter = (filesystem, path) ->
   if path.length
     path = path.replace /\/*$/, "/"
-  
+
   console.log path
-  
+
   filePresenters =
     launch: (file) ->
       data = JSON.parse(file.content())
