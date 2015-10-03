@@ -32,23 +32,6 @@ module.exports = (I, self) ->
           blob: blob
           cacheControl: cacheControl
 
-    saveFilesystem: ->
-      data = I.filesystem
-
-      blob = new Blob [JSON.stringify(data)], type: "application/json"
-
-      self.saveDataBlob blob
-
-    saveIndexHtml: (name="index.html") ->
-      self.saveFilesystem()
-      .then (fsURL) ->
-        user = "danielx"
-        blob = new Blob [indexPage(PACKAGE.remoteDependencies, fsURL)], type: "text/html"
-
-        self.saveBlob name, blob
-      .catch (e) ->
-        console.error e
-
 urlSafeBase64EncodedSHA256 = (arrayBuffer) ->
   hash = SHA256(CryptoJS.lib.WordArray.create(arrayBuffer))
   base64 = hash.toString(CryptoJS.enc.Base64)
@@ -85,55 +68,3 @@ refreshPolicy = (token) ->
     localStorage[POLICY_STORAGE_KEY] = JSON.stringify(policyJSON)
 
     policyJSON
-
-indexPage = (remoteDependencies, fsURL) ->
-  """
-    <!DOCTYPE html>
-    <html>
-      <head>
-        <meta charset="utf-8">
-        #{dependencyScripts(remoteDependencies)}
-      </head>
-      <body>
-        #{launcherScript(fsURL)}
-      </body>
-    </html>
-  """
-
-# `makeScript` returns a string representation of a script tag that has a src
-# attribute.
-makeScript = (src) ->
-  "<script src=#{JSON.stringify(src)}><\/script>"
-
-# `dependencyScripts` returns a string containing the script tags that are the
-# remote script dependencies of this build.
-dependencyScripts = (remoteDependencies=[]) ->
-  remoteDependencies.map(makeScript).join("\n")
-
-# Fetch a pacakge from a url and require it
-launcherScript = (filesystemURL) ->
-  """
-    <script>
-      (function() {
-        var src = #{JSON.stringify(PACKAGE.dependencies.require.distribution.main.content)};
-        var Require = new Function("PACKAGE", "return " + src)({distribution: {main: {content: src}}});
-        var require = Require.generateFor({});
-
-        var xhr = new XMLHttpRequest();
-        xhr.open('GET', #{JSON.stringify(filesystemURL)}, true);
-        xhr.onload = function(e) {
-          var ref;
-          if (((200 <= (ref = this.status) && ref < 300)) || this.status === 304) {
-            var fs = JSON.parse(this.responseText);
-            var systemPackageFile = fs.files.filter(function(file) {
-              return file.path === "System/system.pkg"
-            })[0];
-
-            require(JSON.parse(systemPackageFile.content)).boot(fs);
-          }
-        };
-        xhr.onerror = console.error.bind(console);
-        xhr.send();
-      })();
-    <\/script>
-  """

@@ -104,6 +104,13 @@ module.exports = (I={}, self=Model(I)) ->
   self.include require("./persistence")
 
   handlers =
+    # TODO: This is only so we can test from the IDE, should be removed later
+    coffee: (file) ->
+      file.asText()
+      .then system.execCoffee
+      .catch(console.error.bind(console))
+      .done()
+
     launch: (file) ->
       self.run JSON.parse(file.content())
 
@@ -121,5 +128,7 @@ module.exports = (I={}, self=Model(I)) ->
   self.registerHandler "jpg", imageViewer
   self.registerHandler "png", imageViewer
   self.registerHandler "gif", imageViewer
+
+  
 
   return self
