@@ -129,6 +129,4 @@ module.exports = (I={}, self=Model(I)) ->
   self.registerHandler "png", imageViewer
   self.registerHandler "gif", imageViewer
 
-  
-
   return self

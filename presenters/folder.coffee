@@ -5,8 +5,6 @@ module.exports = FolderPresenter = (filesystem, path) ->
   if path.length
     path = path.replace /\/*$/, "/"
 
-  console.log path
-
   filePresenters =
     launch: (file) ->
       data = JSON.parse(file.content())
@@ -20,9 +18,7 @@ module.exports = FolderPresenter = (filesystem, path) ->
       e.dataTransfer.setData("application/whimsy-file+json", JSON.stringify(file.I))
 
   folderDrop = (path) ->
-    console.log "F", path
     (e) ->
-      console.log "folder drop"
       if folderPath = system.dragFolder
         e.stopPropagation()
         e.preventDefault()
