@@ -133,7 +133,7 @@ module.exports = (I={}, self=Model(I)) ->
     if I.url
       iframe.src = I.url
     else if I.packagePath
-      file = system.find()
+      file = system.find(I.packagePath)
       if file
         file.asJSON()
         .then writePackage
