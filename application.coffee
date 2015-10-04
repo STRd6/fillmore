@@ -65,11 +65,13 @@ module.exports = (I={}, self=Model(I)) ->
 
     popOut: ->
       return if externalWindow
-      externalWindow = window.open(I.url, "", "width=#{I.width},height=#{I.height}")
+      externalWindow = window.open("", "", "width=#{I.width},height=#{I.height}")
 
       unless externalWindow # Pop up blocked
         alert "Pop out was blocked"
         return
+
+      initContent()
 
       # Get State
       self.invokeRemote "saveState"
@@ -111,9 +113,6 @@ module.exports = (I={}, self=Model(I)) ->
     system: (method, params...) ->
       system[method](params...)
 
-    ###
-
-    ###
     window: ->
       appWindow
 
@@ -126,14 +125,22 @@ module.exports = (I={}, self=Model(I)) ->
 
   writePackage = (pkg) ->
     html = Runner.html(pkg)
-    iframe.contentWindow.document.write(html)
+    if externalWindow
+      externalWindow.document.write(html)
+    else
+      iframe.contentWindow.document.write(html)
+
+  writeUrl = (url) ->
+    if externalWindow
+      externalWindow.document.location = url
+    else
+      iframe.src = url
 
   initContent = ->
-    # TODO: Work with pop-out windows
     if I.url
-      iframe.src = I.url
+      writeUrl(I.url)
     else if I.packagePath
-      file = system.find(I.packagePath)
+      file = system.filesystem().find(I.packagePath)
       if file
         file.asJSON()
         .then writePackage

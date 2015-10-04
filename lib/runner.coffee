@@ -8,7 +8,7 @@ module.exports =
           #{dependencyScripts(pkg.remoteDependencies)}
         </head>
         <body>
-          "<script>#{system.require.executePackageWrapper(pkg)}<\/script>"
+          <script>#{system.require.executePackageWrapper(pkg)}<\/script>
         </body>
       </html>
     """
