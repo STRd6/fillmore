@@ -21,6 +21,8 @@ respond to the `loadFile` message to allow this functionality.
 require "cornerstone"
 Postmaster = require "postmaster"
 
+Ajax = require "./lib/ajax"
+Runner = require "./lib/runner"
 Window = require "./window"
 
 module.exports = (I={}, self=Model(I)) ->
@@ -110,7 +112,7 @@ module.exports = (I={}, self=Model(I)) ->
       system[method](params...)
 
     ###
-    
+
     ###
     window: ->
       appWindow
@@ -122,7 +124,28 @@ module.exports = (I={}, self=Model(I)) ->
 
   self.include Postmaster
 
-  if I.url
-    iframe.src = I.url
+  writePackage = (pkg) ->
+    html = Runner.html(pkg)
+    iframe.contentWindow.document.write(html)
+
+  initContent = ->
+    # TODO: Work with pop-out windows
+    if I.url
+      iframe.src = I.url
+    else if I.packagePath
+      file = system.find()
+      if file
+        file.asJSON()
+        .then writePackage
+        .catch error
+        .done()
+      else
+        error "Could not find file at path: #{I.packagePath}"
+    else if I.packageUrl
+      Ajax.getJSON(I.packageUrl)
+      .then writePackage
+      .catch error
+
+  initContent()
 
   return self

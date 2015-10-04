@@ -1,5 +1,6 @@
 Window = require "../window"
 Folder = require "../templates/folder"
+File = require "../file"
 
 module.exports = FolderPresenter = (filesystem, path) ->
   if path.length

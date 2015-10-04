@@ -10,6 +10,9 @@ Window = require "./window"
 
 Require = require "require"
 
+global.log = console.log.bind(console)
+global.error = console.error.bind(console)
+
 module.exports = (I={}, self=Model(I)) ->
   defaults I,
     filesystem: {}

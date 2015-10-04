@@ -30,6 +30,9 @@ module.exports = File = (I={}, self=Model(I)) ->
         else
           I.content
 
+    asJSON: ->
+      self.asText().then JSON.parse
+
     name: ->
       self.path().split('/').last()
 
