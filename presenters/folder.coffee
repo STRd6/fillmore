@@ -11,6 +11,23 @@ module.exports = FolderPresenter = (filesystem, path) ->
 
       title: data.title
       icon: data.icon
+      drop: (e) ->
+        params = JSON.parse(file.content())
+
+        if system.drag
+          e.stopPropagation()
+          e.preventDefault()
+
+          params.file = system.drag
+          system.run params
+        else if fileData = e.dataTransfer.getData("application/whimsy-file+json")
+          e.stopPropagation()
+          e.preventDefault()
+
+          params.file = File JSON.parse(fileData)
+          system.run params
+        else
+          ;# TODO: Handle dropped HTML5 files
 
   fileDrag = (file) ->
     (e) ->
