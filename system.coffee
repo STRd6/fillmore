@@ -8,6 +8,8 @@ Window = require "./window"
 
 {readFile} = require "./util"
 
+Require = require "require"
+
 module.exports = (I={}, self=Model(I)) ->
   defaults I,
     filesystem: {}
@@ -17,8 +19,8 @@ module.exports = (I={}, self=Model(I)) ->
   self.extend
     # Expose PACKAGE and require so scripts can really dig in!
     PACKAGE: PACKAGE
-    Require: require "require"
-    require: require
+    Require: Require
+    require: Require.generateFor PACKAGE
 
     runningApplications: Observable []
 
