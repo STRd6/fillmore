@@ -54,8 +54,8 @@ module.exports = FolderPresenter = (filesystem, path) ->
         filesystem.files.push file
 
   presentFolder = (path, basePath="") ->
-    if path is "Trash/"
-      icon = ""
+    if path is "Trash"
+      icon = "https://s3.amazonaws.com/whimsyspace-databucket-1g3p6d9lcl6x1/danielx/data/ZrIACspIYGBT8JCaSlnVK3nIb6W3KWrKiS7hKCbcDrQ"
     else
       icon = "http://findicons.com/files/icons/2256/hamburg/32/folder.png"
 
@@ -80,12 +80,12 @@ module.exports = FolderPresenter = (filesystem, path) ->
 
     extend presenter,
       mousedown: (e) ->
-        console.log e
         if e.which is 3
           e.preventDefault()
           system.displayContextMenu(e, file)
-          return false
-      click: ->
+      click: (e) ->
+        e.preventDefault()
+
         system.open file
       dragstart: fileDrag(file)
         
@@ -101,7 +101,7 @@ module.exports = FolderPresenter = (filesystem, path) ->
     system.addWindow window
 
   filePresentersIn = (path) ->
-    filesystem.foldersIn(path).map (folderName) ->
+    filesystem.foldersIn(path).sort().map (folderName) ->
       presentFolder folderName, path
     .concat filesystem.filesIn(path).map presentFile
 
