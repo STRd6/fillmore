@@ -96,4 +96,6 @@ module.exports = (I, self) ->
   window.addEventListener "click", ->
     contextFile null
 
-  window.addEventListener "contextmenu", cancel
+  window.addEventListener "contextmenu", (e) ->
+    unless e.target.nodeName is "IMG"
+      cancel(e)
