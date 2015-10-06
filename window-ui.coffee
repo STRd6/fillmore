@@ -1,3 +1,5 @@
+ContextMenu = require "./templates/context_menu"
+
 module.exports = (I, self) ->
   topIndex = 1
 
@@ -6,10 +8,35 @@ module.exports = (I, self) ->
 
     appWindow.style.zIndex = topIndex
 
+  contextFile = Observable null
+  contextMenu = ContextMenu
+    classes: ->
+      "hidden" unless contextFile()
+    delete: ->
+      file = contextFile()
+      file.path "Trash/" + file.name()
+
+    rename: ->
+      file = contextFile()
+      newName = prompt "Rename", file.path()
+
+      if newName
+        file.path(newName)
+
+    properties: ->
+      console.log contextFile().I
+
+  document.body.appendChild contextMenu
+
   self.extend
     addWindow: (window) ->
       raise window.element()
       document.getElementsByTagName("desktop")[0].appendChild window.element()
+
+    displayContextMenu: (e, file) ->
+      contextMenu.style.top = e.pageY + "px"
+      contextMenu.style.left = e.pageX + "px"
+      contextFile file
 
   activeDrag = null
   initialPosition = null
@@ -65,3 +92,8 @@ module.exports = (I, self) ->
   dropper document, (e) ->
     Array::forEach.call e.dataTransfer.files, (file) ->
       self.handleFileDrop(file)
+
+  window.addEventListener "click", ->
+    contextFile null
+
+  window.addEventListener "contextmenu", cancel

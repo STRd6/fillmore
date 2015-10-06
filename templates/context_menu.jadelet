@@ -1,0 +1,4 @@
+ul.context-menu(class=@classes)
+  li(click=@rename) Rename
+  li(click=@properties) Properties
+  li(click=@delete) Move to Trash

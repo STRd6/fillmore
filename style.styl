@@ -86,3 +86,23 @@ desktop
     position: absolute
     top: 0
     left: 0
+
+ul.context-menu
+  background-color: lightgray
+  border: 1px solid slategray
+  display: inline-block
+  list-style-type: none
+  margin: 0
+  padding: 0
+  position: absolute
+  z-index: 9000
+  
+  &.hidden
+    display: none
+
+  & > li
+  
+    padding: 0.25em
+
+    &:hover
+      background-color: white

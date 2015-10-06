@@ -54,29 +54,41 @@ module.exports = FolderPresenter = (filesystem, path) ->
         filesystem.files.push file
 
   presentFolder = (path, basePath="") ->
+    if path is "Trash/"
+      icon = ""
+    else
+      icon = "http://findicons.com/files/icons/2256/hamburg/32/folder.png"
+
     title: path.split('/').last()
-    icon: "http://findicons.com/files/icons/2256/hamburg/32/folder.png"
-    fn: ->
+    icon: icon
+    click: ->
       openFolder(basePath + path)
     dragstart: (e) ->
       system.dragFolder = basePath + path + "/"
       e.dataTransfer.setData("application/whimsy-folder", basePath + path)
     drop: folderDrop(basePath + path + "/")
+    mousedown: ->
 
   presentFile = (file) ->
-    if presenter = filePresenters[file.extension()]
-      extend presenter(file),
-        fn: ->
-          system.open file
-        dragstart: fileDrag(file)
-
+    customPresenter = filePresenters[file.extension()]
+    if customPresenter
+      presenter = customPresenter file
     else
-      title: file.path().split('/').last()
-      icon: "http://files.softicons.com/download/toolbar-icons/iconza-grey-icons-by-turbomilk/png/32x32/document.png"
-      fn: ->
+      presenter =
+        title: file.name
+        icon: "http://files.softicons.com/download/toolbar-icons/iconza-grey-icons-by-turbomilk/png/32x32/document.png"
+
+    extend presenter,
+      mousedown: (e) ->
+        console.log e
+        if e.which is 3
+          e.preventDefault()
+          system.displayContextMenu(e, file)
+          return false
+      click: ->
         system.open file
       dragstart: fileDrag(file)
-
+        
   openFolder = (path) ->
     f = FolderPresenter(filesystem, path)
 
