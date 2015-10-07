@@ -68,7 +68,7 @@ window["STRd6/fillmore:master"]({
     },
     "pixie.cson": {
       "path": "pixie.cson",
-      "content": "remoteDependencies: [\n  \"https://code.jquery.com/jquery-2.1.4.min.js\"\n  \"https://s3.amazonaws.com/whimsyspace-databucket-1g3p6d9lcl6x1/danielx/data/BQQeERRKiSrxJfd8_pl-8spMqyKtnn2ESZXBVYdbh-M\"\n]\ndependencies:\n  cornerstone: \"distri/cornerstone:master\"\n  require: \"distri/require:quinine\"\n  \"s3-uploader\": \"distri/s3-uploader:v0.1.3\"\n  postmaster: \"distri/postmaster:v0.3.1-pre.0\"\n",
+      "content": "remoteDependencies: [\n  \"https://code.jquery.com/jquery-2.1.4.min.js\"\n  \"https://d1dyt0zdti9ch3.cloudfront.net/danielx/data/BQQeERRKiSrxJfd8_pl-8spMqyKtnn2ESZXBVYdbh-M\"\n]\ndependencies:\n  cornerstone: \"distri/cornerstone:master\"\n  require: \"distri/require:quinine\"\n  \"s3-uploader\": \"distri/s3-uploader:v0.1.3\"\n  postmaster: \"distri/postmaster:v0.3.1-pre.0\"\n",
       "mode": "100644",
       "type": "blob"
     },
@@ -211,7 +211,7 @@ window["STRd6/fillmore:master"]({
     },
     "pixie": {
       "path": "pixie",
-      "content": "module.exports = {\"remoteDependencies\":[\"https://code.jquery.com/jquery-2.1.4.min.js\",\"https://s3.amazonaws.com/whimsyspace-databucket-1g3p6d9lcl6x1/danielx/data/BQQeERRKiSrxJfd8_pl-8spMqyKtnn2ESZXBVYdbh-M\"],\"dependencies\":{\"cornerstone\":\"distri/cornerstone:master\",\"require\":\"distri/require:quinine\",\"s3-uploader\":\"distri/s3-uploader:v0.1.3\",\"postmaster\":\"distri/postmaster:v0.3.1-pre.0\"}};",
+      "content": "module.exports = {\"remoteDependencies\":[\"https://code.jquery.com/jquery-2.1.4.min.js\",\"https://d1dyt0zdti9ch3.cloudfront.net/danielx/data/BQQeERRKiSrxJfd8_pl-8spMqyKtnn2ESZXBVYdbh-M\"],\"dependencies\":{\"cornerstone\":\"distri/cornerstone:master\",\"require\":\"distri/require:quinine\",\"s3-uploader\":\"distri/s3-uploader:v0.1.3\",\"postmaster\":\"distri/postmaster:v0.3.1-pre.0\"}};",
       "type": "blob"
     },
     "presenters/folder": {
@@ -301,7 +301,7 @@ window["STRd6/fillmore:master"]({
   "entryPoint": "main",
   "remoteDependencies": [
     "https://code.jquery.com/jquery-2.1.4.min.js",
-    "https://s3.amazonaws.com/whimsyspace-databucket-1g3p6d9lcl6x1/danielx/data/BQQeERRKiSrxJfd8_pl-8spMqyKtnn2ESZXBVYdbh-M"
+    "https://d1dyt0zdti9ch3.cloudfront.net/danielx/data/BQQeERRKiSrxJfd8_pl-8spMqyKtnn2ESZXBVYdbh-M"
   ],
   "repository": {
     "branch": "master",
