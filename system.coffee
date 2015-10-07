@@ -119,19 +119,4 @@ module.exports = (I={}, self=Model(I)) ->
     launch: (file) ->
       self.run JSON.parse(file.content())
 
-  imageViewer = (file) ->
-    img = document.createElement "img"
-    img.src = file.url()
-
-    window = Window
-      title: file.path
-    .extend
-      content: img
-
-    self.addWindow window
-
-  self.registerHandler "jpg", imageViewer
-  self.registerHandler "png", imageViewer
-  self.registerHandler "gif", imageViewer
-
   return self

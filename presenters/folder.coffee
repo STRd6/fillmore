@@ -88,7 +88,7 @@ module.exports = FolderPresenter = (filesystem, path) ->
 
         system.open file
       dragstart: fileDrag(file)
-        
+
   openFolder = (path) ->
     f = FolderPresenter(filesystem, path)
 
