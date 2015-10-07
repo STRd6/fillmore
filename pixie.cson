@@ -1,6 +1,6 @@
 remoteDependencies: [
   "https://code.jquery.com/jquery-2.1.4.min.js"
-  "https://s3.amazonaws.com/whimsyspace-databucket-1g3p6d9lcl6x1/danielx/data/BQQeERRKiSrxJfd8_pl-8spMqyKtnn2ESZXBVYdbh-M"
+  "https://d1dyt0zdti9ch3.cloudfront.net/danielx/data/BQQeERRKiSrxJfd8_pl-8spMqyKtnn2ESZXBVYdbh-M"
 ]
 dependencies:
   cornerstone: "distri/cornerstone:master"
