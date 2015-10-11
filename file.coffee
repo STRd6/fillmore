@@ -16,7 +16,8 @@ module.exports = File = (I={}, self=Model(I)) ->
           .then (blob) ->
             blob.name = self.path()
 
-            return blob
+            return new window.File [blob], self.path(), 
+              type: self.type
         else
           new window.File [self.content()], self.path(),
             type: self.type()
