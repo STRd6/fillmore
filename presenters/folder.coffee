@@ -55,12 +55,12 @@ module.exports = FolderPresenter = (filesystem, path) ->
 
   presentFolder = (path, basePath="") ->
     if path is "Trash"
-      icon = "https://s3.amazonaws.com/whimsyspace-databucket-1g3p6d9lcl6x1/danielx/data/ZrIACspIYGBT8JCaSlnVK3nIb6W3KWrKiS7hKCbcDrQ"
+      classes = "folder trash"
     else
-      icon = "http://findicons.com/files/icons/2256/hamburg/32/folder.png"
+      classes = "folder"
 
+    classes: classes
     title: path.split('/').last()
-    icon: icon
     click: ->
       openFolder(basePath + path)
     dragstart: (e) ->
@@ -76,9 +76,11 @@ module.exports = FolderPresenter = (filesystem, path) ->
     else
       presenter =
         title: file.name
-        icon: "http://files.softicons.com/download/toolbar-icons/iconza-grey-icons-by-turbomilk/png/32x32/document.png"
 
     extend presenter,
+      classes: ->
+        file.extension()
+
       mousedown: (e) ->
         if e.which is 3
           e.preventDefault()
