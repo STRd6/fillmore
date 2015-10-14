@@ -139,6 +139,10 @@ module.exports = (I={}, self=Model(I)) ->
   initContent = ->
     if I.url
       writeUrl(I.url)
+    else if I.package
+      setTimeout ->
+        writePackage(I.package)
+      , 0
     else if I.packagePath
       file = system.filesystem().find(I.packagePath)
       if file
