@@ -80,6 +80,9 @@ module.exports = (I={}, self=Model(I)) ->
 
       self.addWindow app.window()
 
+      # TODO: Return PID or an app data object
+      return
+
     boot: (filesystem) ->
       self.filesystem Filesystem filesystem
 
