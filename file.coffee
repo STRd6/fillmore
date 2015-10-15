@@ -9,27 +9,31 @@ module.exports = File = (I={}, self=Model(I)) ->
 
   self.extend
     asFile: ->
+      url = self.url()
+      content = self.content()
+
       Q.fcall ->
-        url = self.url()
         if url # remote file
           Ajax.getBlob(url + "?O_o")
           .then (blob) ->
             blob.name = self.path()
 
-            return new window.File [blob], self.path(), 
+            return new window.File [blob], self.path(),
               type: self.type
         else
-          new window.File [self.content()], self.path(),
+          new window.File [content], self.path(),
             type: self.type()
 
     asText: ->
+      url = self.url()
+      content = self.content()
+
       Q.fcall ->
-        url = self.url()
         if url
           self.asFile()
           .then readFile
         else
-          I.content
+          content
 
     asJSON: ->
       self.asText().then JSON.parse
