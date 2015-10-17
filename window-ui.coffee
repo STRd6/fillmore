@@ -83,7 +83,7 @@ module.exports = (I, self) ->
   document.addEventListener "mouseup", (e) ->
     setTimeout ->
       $('window').removeClass "drop-hover"
-      system.drag = null
+      system.drag = system.dragFolder = null
 
   document.addEventListener "dragover", cancel
   document.addEventListener "dragenter", cancel

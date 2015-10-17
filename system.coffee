@@ -18,6 +18,8 @@ module.exports = (I={}, self=Model(I)) ->
     filesystem: {}
 
   self.attrModel "filesystem", Filesystem
+  
+  self.include Bindable
 
   self.extend
     # Expose PACKAGE and require so scripts can really dig in!
@@ -85,6 +87,11 @@ module.exports = (I={}, self=Model(I)) ->
 
     boot: (filesystem) ->
       self.filesystem Filesystem filesystem
+
+      # Attach to filesystem events
+      ["write", "remove", "rename"].forEach (eventType) ->
+        self.filesystem().on eventType, (args...) ->
+          self.trigger "filesystem", eventType, args...
 
       # Run init scripts
       self.filesystem().filesIn("System/Boot/").forEach (file) ->

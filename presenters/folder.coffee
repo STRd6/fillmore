@@ -47,20 +47,22 @@ module.exports = FolderPresenter = (filesystem, path) ->
   folderDrop = (path) ->
     (e) ->
       if folderPath = system.dragFolder
+        system.dragFolder = null
         e.stopPropagation()
-        e.preventDefault()
         [..., name, unused] = folderPath.split('/')
         filesystem.moveFolder(folderPath, path + name + "/")
       else if file = system.drag
+        system.drag = null
         e.stopPropagation()
-        e.preventDefault()
-        file.path path + file.name()
+        newPath = path + file.name()
+        unless file.path() is newPath
+          filesystem.moveFile file, newPath
       else if fileData = e.dataTransfer.getData("application/whimsy-file+json")
         e.stopPropagation()
-        e.preventDefault()
         file = File JSON.parse(fileData)
         file.path path + file.name()
-        filesystem.files.push file
+
+        filesystem.writeFile file.I
 
   presentFolder = (path, basePath="") ->
     if path is "Trash"
@@ -85,6 +87,9 @@ module.exports = FolderPresenter = (filesystem, path) ->
     else
       presenter =
         title: file.name
+
+    defaults presenter,
+      drop: ->
 
     extend presenter,
       classes: ->
