@@ -114,7 +114,7 @@ module.exports = (I={}, self=Model(I)) ->
       system[method](params...)
 
     focus: ->
-      system.raiseToTop(self.appWindow)
+      system.raiseToTop(self.window())
 
     window: ->
       appWindow

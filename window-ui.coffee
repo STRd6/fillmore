@@ -1,7 +1,7 @@
 ContextMenu = require "./templates/context_menu"
 
 module.exports = (I, self) ->
-  topIndex = 1
+  topIndex = 2
 
   raiseToTop = (window) ->
     return if window.zIndex() >= topIndex
