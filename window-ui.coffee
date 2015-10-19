@@ -3,10 +3,11 @@ ContextMenu = require "./templates/context_menu"
 module.exports = (I, self) ->
   topIndex = 1
 
-  raise = (appWindow) ->
-    topIndex += 1
+  raiseToTop = (window) ->
+    return if window.zIndex() >= topIndex
 
-    appWindow.style.zIndex = topIndex
+    topIndex += 1
+    window.zIndex topIndex
 
   contextFile = Observable null
   contextMenu = ContextMenu
@@ -30,8 +31,12 @@ module.exports = (I, self) ->
 
   self.extend
     addWindow: (window) ->
-      raise window.element()
+      raiseToTop window
+      window.element().window = window
+
       document.getElementsByTagName("desktop")[0].appendChild window.element()
+
+    raiseToTop: raiseToTop
 
     displayContextMenu: (e, file) ->
       contextMenu.style.top = e.pageY + "px"
@@ -47,7 +52,7 @@ module.exports = (I, self) ->
     if target.classList.contains "handle"
       activeDrag = target.parentNode
 
-      raise(activeDrag)
+      raiseToTop(activeDrag.window)
       document.getElementsByClassName("drag-fix")[0].style.zIndex = topIndex + 1
 
       initialPosition = activeDrag.getBoundingClientRect()
@@ -59,8 +64,9 @@ module.exports = (I, self) ->
         x: e.pageX - initialMouse.pageX
         y: e.pageY - initialMouse.pageY
 
-      activeDrag.style.left = initialPosition.left + delta.x + "px"
-      activeDrag.style.top = initialPosition.top + delta.y + "px"
+      window = activeDrag.window
+      window.left initialPosition.left + delta.x
+      window.top initialPosition.top + delta.y
 
   document.addEventListener "mouseup", (e) ->
     document.getElementsByClassName("drag-fix")[0].style.zIndex = -1

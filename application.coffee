@@ -113,6 +113,9 @@ module.exports = (I={}, self=Model(I)) ->
     system: (method, params...) ->
       system[method](params...)
 
+    focus: ->
+      system.raiseToTop(self.appWindow)
+
     window: ->
       appWindow
 

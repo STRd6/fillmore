@@ -1,4 +1,4 @@
-window(style="width: #{@width()}px; height: #{@height()}px; top: 20px; left: 20px" @drop)
+window(@style @drop)
   h2.handle
     = @title
     .action.close(click=@close) X
