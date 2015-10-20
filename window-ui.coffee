@@ -72,6 +72,17 @@ module.exports = (I, self) ->
     document.getElementsByClassName("drag-fix")[0].style.zIndex = -1
     activeDrag = null
 
+  document.addEventListener "mouseup", (e) ->
+    {target} = e
+
+    if target.nodeName is "WINDOW"
+      {width, height} = target.style
+
+      win = target.window
+
+      win.width(width.slice(0, -2))
+      win.height(height.slice(0, -2))
+
   cancel = (e) ->
     e.preventDefault()
     return false
