@@ -57,6 +57,19 @@ module.exports = (I, self) ->
 
       initialPosition = activeDrag.getBoundingClientRect()
       initialMouse = e
+    else 
+      console.log target, e
+      # raise any window that a person clicked in
+      # Apps that run in iframes need to raise themselves because
+      # events don't bubble out of iframes
+      # NOTE: Can't seem to capture the event when a resize control is pressed
+      win = target.window
+      while target and !win
+        target = target.parentElement
+        win = target.window
+
+      if win
+        raiseToTop(win)
 
   document.addEventListener "mousemove", (e) ->
     if activeDrag
@@ -82,6 +95,10 @@ module.exports = (I, self) ->
 
       win.width(width.slice(0, -2))
       win.height(height.slice(0, -2))
+      raiseToTop(win)
+
+  document.addEventListener "resize", (e) ->
+    console.log e
 
   cancel = (e) ->
     e.preventDefault()
