@@ -2,6 +2,8 @@ Window = require "../window"
 Folder = require "../templates/folder"
 File = require "../file"
 
+imgSuffix = /^(jpg|png|gif)$/
+
 module.exports = FolderPresenter = (filesystem, path) ->
   if path.length
     path = path.replace /\/*$/, "/"
@@ -11,10 +13,16 @@ module.exports = FolderPresenter = (filesystem, path) ->
       title = Observable()
       icon = Observable()
 
-      file.asJSON()
-      .then (data) ->
+      if file.content()
+        data = JSON.parse(file.content())
+
         title data.title
         icon data.icon
+      else
+        file.asJSON()
+        .then (data) ->
+          title data.title
+          icon data.icon
 
       title: title
       icon: icon
@@ -90,6 +98,9 @@ module.exports = FolderPresenter = (filesystem, path) ->
 
     defaults presenter,
       drop: ->
+      icon: ->
+        if file.extension().match imgSuffix
+          file.url()
 
     extend presenter,
       classes: ->
