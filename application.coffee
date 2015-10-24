@@ -77,7 +77,6 @@ module.exports = (I={}, self=Model(I)) ->
       self.invokeRemote "saveState"
       .then (state) ->
         appWindow.close()
-        console.log state
         savedState = state
         self.remoteTarget = -> externalWindow
         self.invokeRemote "restoreState", state
@@ -97,7 +96,6 @@ module.exports = (I={}, self=Model(I)) ->
     loadWhimsyFile: (file) ->
       file.asFile()
       .then (file) ->
-        console.log file
         self.loadFile file
       .done()
 

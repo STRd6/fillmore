@@ -18,7 +18,7 @@ module.exports = (I={}, self=Model(I)) ->
     filesystem: {}
 
   self.attrModel "filesystem", Filesystem
-  
+
   self.include Bindable
 
   self.extend
