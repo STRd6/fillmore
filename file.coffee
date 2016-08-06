@@ -12,7 +12,7 @@ module.exports = File = (I={}, self=Model(I)) ->
       url = self.url()
       content = self.content()
 
-      Q.fcall ->
+      Promise.resolve().then ->
         if url # remote file
           Ajax.getBlob(url + "?O_o")
           .then (blob) ->
@@ -28,7 +28,7 @@ module.exports = File = (I={}, self=Model(I)) ->
       url = self.url()
       content = self.content()
 
-      Q.fcall ->
+      Promise.resolve().then ->
         if url
           self.asFile()
           .then readFile

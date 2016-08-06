@@ -38,7 +38,7 @@ urlSafeBase64EncodedSHA256 = (arrayBuffer) ->
   urlSafeBase64 = base64.replace(/\+/g, '-').replace(/\//g, '_').replace(/\=+$/, "")
 
 getToken = ->
-  Q.fcall ->
+  Promise.resolve.then ->
     if token = localStorage.WHIMSY_TOKEN
       token
     else
@@ -48,7 +48,7 @@ getToken = ->
         throw new Error("No token given")
 
 getLocalPolicy = ->
-  Q.fcall ->
+  Promise.resolve().then ->
     policy = JSON.parse(localStorage[POLICY_STORAGE_KEY])
   .then validatePolicyExpiration
 

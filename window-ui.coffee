@@ -57,7 +57,7 @@ module.exports = (I, self) ->
 
       initialPosition = activeDrag.getBoundingClientRect()
       initialMouse = e
-    else 
+    else
       # raise any window that a person clicked in
       # Apps that run in iframes need to raise themselves because
       # events don't bubble out of iframes

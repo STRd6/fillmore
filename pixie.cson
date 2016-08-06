@@ -3,7 +3,7 @@ remoteDependencies: [
   "https://d1dyt0zdti9ch3.cloudfront.net/danielx/data/BQQeERRKiSrxJfd8_pl-8spMqyKtnn2ESZXBVYdbh-M"
 ]
 dependencies:
-  cornerstone: "distri/cornerstone:master"
+  cornerstone: "distri/cornerstone:v0.3.0-pre.2"
   require: "distri/require:quinine"
   "s3-uploader": "distri/s3-uploader:v0.1.3"
   postmaster: "distri/postmaster:v0.4.0-pre.0"
