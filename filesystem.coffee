@@ -6,7 +6,7 @@ module.exports = Filesystem = (I={}, self=Model(I)) ->
     files: [{
       path: "netboot.coffee"
       content: """
-        url = prompt "URL:", "http://danielx.whimsy.space/index.json"
+        url = prompt "URL:", "https://danielx.whimsy.space/index.json"
         if url
           system.netBoot(url)
       """

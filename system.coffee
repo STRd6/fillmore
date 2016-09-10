@@ -100,7 +100,6 @@ module.exports = (I={}, self=Model(I)) ->
         else if file.path().endsWith(".coffee")
           file.asText()
           .then self.execCoffee
-          .done()
 
     netBoot: (url) ->
       Ajax.getJSON(url)
@@ -124,7 +123,6 @@ module.exports = (I={}, self=Model(I)) ->
       file.asText()
       .then system.execCoffee
       .catch(console.error.bind(console))
-      .done()
 
     launch: (file) ->
       self.run JSON.parse(file.content())
