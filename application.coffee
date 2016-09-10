@@ -97,7 +97,6 @@ module.exports = (I={}, self=Model(I)) ->
       file.asFile()
       .then (file) ->
         self.loadFile file
-      .done()
 
     loadFile: (file) ->
       self.invokeRemote "loadFile", file
@@ -150,7 +149,6 @@ module.exports = (I={}, self=Model(I)) ->
         file.asJSON()
         .then writePackage
         .catch error
-        .done()
       else
         error "Could not find file at path: #{I.packagePath}"
     else if I.packageUrl
