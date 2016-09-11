@@ -126,9 +126,13 @@ module.exports = (I={}, self=Model(I)) ->
   writePackage = (pkg) ->
     html = Runner.html(pkg)
     if externalWindow
-      externalWindow.document.write(html)
+      doc = externalWindow.document
     else
-      iframe.contentWindow.document.write(html)
+      doc = iframe.contentWindow.document
+
+    doc.open()
+    doc.write(html)
+    doc.close()
 
   writeUrl = (url) ->
     if externalWindow
